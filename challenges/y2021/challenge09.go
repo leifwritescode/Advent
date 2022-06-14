@@ -3,7 +3,6 @@ package challenges
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"sort"
 	"strings"
 
@@ -168,33 +167,6 @@ func (c *Challenge09) dfsTracePath(p common_math.Point) []common_math.Point {
 	}
 
 	return result
-}
-
-func (c *Challenge09) pathContains(p common_math.Point, path []common_math.Point) bool {
-	for _, v := range path {
-		if v == p {
-			return true
-		}
-	}
-	return false
-}
-
-func (c *Challenge09) visualiseBasin(path []common_math.Point) {
-	log.Println("### BEGIN VIS ###")
-	for y := 0; y < c.height; y++ {
-		str := ""
-		for x := 0; x < c.width; x++ {
-			p := common_math.Point{X: x, Y: y}
-			if c.pathContains(p, path) {
-				height := c.input[p.Y*c.width+p.X]
-				str = fmt.Sprintf("%s%d", str, height)
-			} else {
-				str = fmt.Sprintf("%s%s", str, ".")
-			}
-		}
-		log.Println(str)
-	}
-	log.Println("#### END VIS ####")
 }
 
 func (c *Challenge09) SolvePartTwo() string {
