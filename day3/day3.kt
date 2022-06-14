@@ -1,4 +1,3 @@
-
 import java.io.File
 import java.util.*
 import kotlin.collections.*
@@ -58,10 +57,15 @@ fun main(args: Array<String>) {
     // create a hashmap, keyed by points
     // initially, populate with each point passed by the first wire
     // do so once for each point, such that each k -> v is k -> 1
+    var stepMap = hashMapOf<Point, Int>()
     var hashMap = hashMapOf<Point, Int>()
-    for (p in wires.get(0)) {
+    var firstWire = wires.get(0)
+    for (i in 0..firstWire.size-1) {
+        var p = firstWire.get(i)
         if (!hashMap.containsKey(p)) {
-                hashMap.set(p, 1)
+            hashMap.set(p, 1)
+            // initially, step map value for p is indexOf(p) + 1
+            stepMap.set(p, i+1)
         }
     }
 
@@ -69,12 +73,16 @@ fun main(args: Array<String>) {
     var totalWires = wires.size - 1
     for (w in 1..totalWires) {
         var wire = wires.get(w)
-        for (p in wire) {
+        for (i in 0..wire.size-1) {
+            var p = wire.get(i)
             if (hashMap.containsKey(p)) {
                 // v = w if wire not yet counted for p
                 var v = hashMap.getValue(p)
                 if (v == w) {
                     hashMap.set(p, v + 1)
+                    var s = stepMap.getValue(p)
+                    // each additional point is step map v(p) + indexOf(p) + 1
+                    stepMap.set(p, s + i + 1)
                 }
             }
         }
@@ -87,7 +95,12 @@ fun main(args: Array<String>) {
     var distances = output.map{ (k,_) -> rectilinearDistance(Point(0, 0), k) }.toMutableList()
     distances.sort()
 
-    // and the first point should be the intersection closest to to the origin!
-    // pop out the rectilinear distance
-    println("DAY3p1 ans = %s".format(distances.get(0))) // ans is 2129 for my input
+    // filter out any points from steps that don't appear in the output candidates
+    // map down to values and sort ascending
+    var steps = stepMap.filterKeys{ output.containsKey(it) }.map{ (_,v) -> v }.toMutableList()
+    steps.sort()
+
+    // first points are closest intersect to origin + closest intersect on wires by distance
+    println("DAY3p1 ans = %s".format(distances.get(0))) 
+    println("DAY3p2 ans = %s".format(steps.get(0)))
 }
