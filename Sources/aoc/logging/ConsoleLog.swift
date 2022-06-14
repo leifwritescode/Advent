@@ -22,15 +22,13 @@ class ConsoleLog : Log {
 
         switch category {
         case .Debug:
-            if (debug) {
-                print(output)
-            }
+            if (debug) { print(output) }
         case .Info:
-            print(output)
+            print(debug ? output.cyan : output)
         case .Solution:
-            print(output.lightGreen.bold)
+            print(output.bold.lightGreen.bold)
         case .Error:
-            print(output.red.bold)
+            print(output.bold.red.bold)
         }
     }
 }
