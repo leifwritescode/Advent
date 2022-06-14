@@ -35,7 +35,7 @@ class SolverY2016D3 : Solvable {
     
     func doPart2(withLog log: Log) {
         let w = 3
-        let transposed = transpose1d(array: sides, width: w, height: sides.count / w)
+        let transposed = Functions.transpose1d(array: sides, width: w, height: sides.count / w)
 
         var valid = 0
         for v in stride(from: 0, to: transposed.count, by: 3) {

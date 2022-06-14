@@ -122,13 +122,13 @@ extension Aoc {
             print("Event Year \(year); Day \(day): \(cls.description).\n")
 
             if (behaviour == .first || behaviour == .both) {
-                timed(toLog: log) {
+                Functions.timed(toLog: log) {
                     solver.doPart1(withLog: log)
                 }
             }
 
             if (behaviour == .second || behaviour == .both) {
-                timed(toLog: log) {
+                Functions.timed(toLog: log) {
                     solver.doPart2(withLog: log)
                 }
             }

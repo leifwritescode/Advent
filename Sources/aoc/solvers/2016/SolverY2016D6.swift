@@ -19,7 +19,7 @@ class SolverY2016D6 : Solvable {
                     String(c)
                 }
             }
-        signals = transpose2d(array: temp, width: temp[0].count, height: temp.count)
+        signals = Functions.transpose2d(array: temp, width: temp[0].count, height: temp.count)
     }
 
     func doPart1(withLog log: Log) {
