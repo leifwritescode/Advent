@@ -9,7 +9,7 @@ import Foundation
 
 @discardableResult
 func timed(toLog log: Log, _ closure: () -> Void) -> TimeInterval {
-    log.debug(theMessage: "Starting timed execution.")
+    log.info(theMessage: "Starting timed execution.")
 
     let start = Date()
     closure()
