@@ -17,9 +17,9 @@ fun main(args: Array<String>) {
                     .map { it.toInt() }
 
     val log = ConsoleLogger()
-    val iclm = ICLMachine(log)
-    var day5p1ans = iclm.exec(program, listOf(1))
+    val iclm = ICLMachine(log, program)
+    var day5p1ans = iclm.exec(listOf(1))
     log.Info("DAY5p1 ans = %s <%s>".format(day5p1ans.last(), day5p1ans))
-    var day5p2ans = iclm.exec(program, listOf(5))
+    var day5p2ans = iclm.exec(listOf(5))
     log.Info("DAY5p2 ans = %s <%s>".format(day5p2ans.last(), day5p2ans))
 }
