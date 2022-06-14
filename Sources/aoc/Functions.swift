@@ -71,4 +71,20 @@ class Functions {
 
         return transposed
     }
+
+    static func aToC(_ ascii: Int) -> String {
+        return aToS([ascii])
+    }
+
+    static func aToS(_ ascii: [Int]) -> String {
+        return ascii.compactMap { a in String(UnicodeScalar(UInt8(a))) }.joined()
+    }
+
+    static func cToA(_ char: String) -> Int {
+        return sToA(char).first!
+    }
+
+    static func sToA(_ str: String) -> [Int] {
+        return str.compactMap { c in Int(c.asciiValue!) }
+    }
 }
