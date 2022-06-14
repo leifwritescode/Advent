@@ -34,6 +34,7 @@ func RootDir(file_path string) string {
 	return r
 }
 
+// Simulates C-style ternary (?:) operator behavior.
 func Ctoi(c bool, t int, f int) int {
 	r := f
 	if c {
