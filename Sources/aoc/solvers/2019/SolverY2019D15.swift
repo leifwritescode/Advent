@@ -15,16 +15,7 @@ fileprivate enum Direction : Int {
     case north = 1, south = 2, west = 3, east = 4
 }
 
-fileprivate struct Coordinate : Hashable {
-    var x: Int, y: Int
-
-    static var zero = Coordinate(0, 0)
-
-    init(_ x: Int, _ y: Int) {
-        self.x = x
-        self.y = y
-    }
-
+fileprivate extension Coordinate {
     func ifMove(_ d: Direction) -> Coordinate {
         let coord: Coordinate
         switch d {
@@ -52,11 +43,6 @@ fileprivate struct Coordinate : Hashable {
             direction = Direction.north
         }
         return direction
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(self.x)
-        hasher.combine(self.y)
     }
 }
 
