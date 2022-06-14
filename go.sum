@@ -1,3 +1,5 @@
+github.com/Dadido3/blackcl v0.0.0-20190512143412-d870b4618536 h1:QdGPo1U1mrsksyPRd4vhn5u1ph13jy8031b+fZqdN2o=
+github.com/Dadido3/blackcl v0.0.0-20190512143412-d870b4618536/go.mod h1:rg2mxou8C5k4kIIZnXD9iESk+I1bMgyExgaSsQ1z/z8=
 github.com/ahmetb/go-linq/v3 v3.2.0 h1:BEuMfp+b59io8g5wYzNoFe9pWPalRklhlhbiU3hYZDE=
 github.com/ahmetb/go-linq/v3 v3.2.0/go.mod h1:haQ3JfOeWK8HpVxMtHHEMPVgBKiYyQ+f1/kLZh/cj9U=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
