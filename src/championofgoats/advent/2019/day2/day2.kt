@@ -60,10 +60,3 @@ object Day2 : Problem {
         }
     }
 }
-
-fun main(args: Array<String>) {
-    Day2.solve(
-    "src/championofgoats/advent/2019/data",
-    "src/championofgoats/advent/2019/day2",
-    ConsoleLogger())
-}

@@ -51,10 +51,3 @@ object Day4 : Problem {
         log.Solution("DAY4p2 ans = %d".format(day4p2ans))
     }
 }
-
-fun main(args: Array<String>) {
-    Day4.solve(
-    "src/championofgoats/advent/2019/data",
-    "src/championofgoats/advent/2019/day4",
-    ConsoleLogger())
-}

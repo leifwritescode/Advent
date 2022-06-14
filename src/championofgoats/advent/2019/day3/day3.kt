@@ -106,10 +106,3 @@ object Day3 : Problem {
         log.Solution("DAY3p2 ans = %s".format(steps.get(0)))
     }
 }
-
-fun main(args: Array<String>) {
-    Day3.solve(
-    "src/championofgoats/advent/2019/data",
-    "src/championofgoats/advent/2019/day3",
-    ConsoleLogger())
-}
