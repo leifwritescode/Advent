@@ -34,21 +34,23 @@ struct Aoc: ParsableCommand {
     }
 
     mutating func run() throws {
-        let log = ConsoleLog(enableDebug: verbose)
         let fqcn = "aoc.SolverY\(year)D\(day)"
-        if let cls = NSClassFromString(fqcn) as? Solvable.Type {
-            let dataFilePath = "data/\(year)/day\(day).in"
-            if let input = try? String(contentsOfFile: dataFilePath) {
-                let solver = cls.init(withLog: log, andInput: input)
-                solver.doPart1(withLog: log)
-                solver.doPart2(withLog: log)
-            } else {
-                log.info(theMessage: "No data file was found at '\(dataFilePath)'.")
-            }
-        } else {
-            log.info(theMessage: "No solver available for \(day)/12/\(year)'s puzzle.")
+        let dataFilePath = "data/\(year)/day\(day).in"
+        let log = ConsoleLog(enableDebug: verbose)
+
+        guard let cls = NSClassFromString(fqcn) as? Solvable.Type else {
+            log.error(theMessage: "No solver was found for \(day)/12/\(year)'s puzzle.")
+            return
         }
 
+        guard let input = try? String(contentsOfFile: dataFilePath) else {
+            log.error(theMessage: "Unable to read the input data file '\(dataFilePath)'.")
+            return
+        }
+
+        let solver = cls.init(withLog: log, andInput: input)
+        solver.doPart1(withLog: log)
+        solver.doPart2(withLog: log)
     }
 }
 
