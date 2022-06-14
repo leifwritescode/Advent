@@ -22,10 +22,3 @@ object Day5 : Problem {
         log.Solution("DAY5p2 ans = %s <%s>".format(day5p2ans.last(), day5p2ans))
     }
 }
-
-fun main(args: Array<String>) {
-    Day5.solve(
-    "src/championofgoats/advent/2019/data",
-    "src/championofgoats/advent/2019/day5",
-    ConsoleLogger())
-}

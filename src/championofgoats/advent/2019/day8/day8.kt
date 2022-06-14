@@ -58,10 +58,3 @@ object Day8 : Problem {
         }
     }
 }
-
-fun main(args: Array<String>) {
-    Day8.solve(
-        "src/championofgoats/advent/2019/data",
-        "src/championofgoats/advent/2019/day8",
-        ConsoleLogger())
-}

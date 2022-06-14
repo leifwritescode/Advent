@@ -39,10 +39,3 @@ object Day1 : Problem {
         log.Solution("DAY1p2 ans = %d".format(fuelNeededPartB))
     }
 }
-
-fun main(args: Array<String>) {
-    Day1.solve(
-        "src/championofgoats/advent/2019/data",
-        "src/championofgoats/advent/2019/day1",
-        ConsoleLogger())
-}

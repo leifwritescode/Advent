@@ -2,16 +2,18 @@
 Solutions in Kotlin
 
 ## Usage
-Where `day` is a non-zero integer between 1 and 25 inclusive:
 ```
-make DAY=<day>
+make 
 ```
-Will build and execute the solution for `day`.
-
-To remove **all** build artefacts:
+Will build the solutions for 2019.
+```
+make run D=<0..25>
+```
+Where `D` is any non-zero integer up to 25, will run the solution for DD/12/2019.
 ```
 make clean
 ```
+Will remove all build artefacts
 
 ## Acknowledgements
 [Laurence Gonsalves](https://github.com/xenomachina), for their execellent [Kotlin arguments parsing library](https://github.com/xenomachina/kotlin-argparser).

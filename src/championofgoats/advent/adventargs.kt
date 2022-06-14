@@ -1,12 +1,26 @@
 package championofgoats.advent
 
-import com.xenomachina.argparser.ArgParser
+class AdventArgs() {
 
-class AdventArgs(parser: ArgParser) {
-    val year: Int by parser.storing(
-        "-y", "--year", help = "the year from which to run problems")
-    val day: Int by parser.storing(
-        "-d", "--day", help = "the problem to run")
-    val outputDir: String by parser.storing(
-        "-o", "--outputDir", help = "the location in which to dump output files")
+    var year: Int = 2019
+    var day: Int = 1
+    var inputDir: String = "src/championofgoats/advent/2019/data"
+    var outputDir: String = "src/championofgoats/advent/2019/day1"
+
+    fun parse(args: Array<String>) : Boolean {
+        if (args.size == 0 || args.size % 2 != 0)
+            return false
+
+        for (i in 0..args.size-1) {
+            var cur = args[i]
+            when (cur) {
+                "-y" -> year = args[i+1].toInt()
+                "-d" -> day = args[i+1].toInt()
+                "-i" -> inputDir = args[i+1]
+                "-o" -> outputDir = args[i+1]
+            }
+        }
+
+        return true
+    }
 }
