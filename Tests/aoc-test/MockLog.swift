@@ -16,6 +16,7 @@ class MockLog : Log {
     required init(enableDebug: Bool) {
         lastSolution = nil
     }
+
     func log(theMessage message: String, inCategory category: LogCategory) {
         if (category == .Solution) {
             lastSolution = message
@@ -23,7 +24,7 @@ class MockLog : Log {
     }
 
     func checkSolution(_ result: String) -> Bool {
-        return lastSolution?.contains(result) ?? false
+        return lastSolution?.matches("\\b\(result)\\b") ?? false
     }
 
     func clear() {

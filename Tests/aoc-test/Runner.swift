@@ -8,20 +8,20 @@
 import XCTest
 @testable import aoclib
 
-func run(_ solver: Solvable.Type, using input: String, expecting exp1: String? = nil, and exp2: String? = nil) {
-    let log = MockLog(enableDebug: false)
+func run(_ solver: Solvable.Type, using input: String, expecting theFirstSolution: String? = nil, and theSecondSolution: String? = nil) {
+    let mockLog = MockLog(enableDebug: false)
 
-    if exp1 != nil {
-        log.clear()
-        let a = solver.init(withLog: log, andInput: input)
-        a.doPart1(withLog: log)
-        XCTAssertTrue(log.checkSolution(exp1!), log.message)
+    if theFirstSolution != nil {
+        mockLog.clear()
+        let firstSolver = solver.init(withLog: mockLog, andInput: input)
+        firstSolver.doPart1(withLog: mockLog)
+        XCTAssertTrue(mockLog.checkSolution(theFirstSolution!), mockLog.message)
     }
 
-    if exp2 != nil {
-        log.clear()
-        let b = solver.init(withLog: log, andInput: input)
-        b.doPart2(withLog: log)
-        XCTAssertTrue(log.checkSolution(exp2!), log.message)
+    if theSecondSolution != nil {
+        mockLog.clear()
+        let secondSolver = solver.init(withLog: mockLog, andInput: input)
+        secondSolver.doPart2(withLog: mockLog)
+        XCTAssertTrue(mockLog.checkSolution(theSecondSolution!), mockLog.message)
     }
 }
