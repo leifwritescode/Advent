@@ -61,7 +61,7 @@ enum SolverBehaviour : String, EnumerableFlag {
 struct Aoc: ParsableCommand {
     static var configuration = CommandConfiguration(
         abstract: "Leif Walker-Grant's Advent of Code solutions in Swift.",
-        version: "v20.11",
+        version: "v20.12",
         subcommands: [List.self, Solve.self],
         defaultSubcommand: List.self
     )
@@ -126,7 +126,7 @@ extension Aoc {
         }
 
         mutating func run() throws {
-            let fqcn = "aoc.SolverY\(year)D\(day)"
+            let fqcn = "aoclib.SolverY\(year)D\(day)"
             let dataFilePath = "data/\(year)/day\(day).in"
             let log = ConsoleLog(enableDebug: verbose)
 
