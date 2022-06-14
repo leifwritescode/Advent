@@ -10,11 +10,11 @@ import CryptoKit
 
 class SolverY2015D4 : Solvable {
     let secretKey: String
-    
+
     required init(withLog log: Log, andInput input: String) {
         secretKey = input.trimmingCharacters(in: CharacterSet.newlines)
     }
-    
+
     private func doTask(withPrefix prefix: String, andLog log: Log) {
         if #available(OSX 10.15, *) {
             var found: Bool = false
@@ -35,13 +35,17 @@ class SolverY2015D4 : Solvable {
             log.error(theMessage: "SolverY2015D4 cannot be run on macOS < 10.15.")
         }
     }
-    
+
     func doPart1(withLog log: Log) {
-        doTask(withPrefix: "00000", andLog: log)
+        _ = timed(toLog: log) {
+            doTask(withPrefix: "00000", andLog: log)
+        }
     }
-    
+
     func doPart2(withLog log: Log) {
-        doTask(withPrefix: "000000", andLog: log)
+        _ = timed(toLog: log) {
+            doTask(withPrefix: "000000", andLog: log)
+        }
     }
 }
 

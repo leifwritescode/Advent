@@ -15,7 +15,7 @@ class SolverY2019D1 : Solvable {
             masses.append(Int($0) ?? 0)
         }
     }
-    
+
     private func simpleFuelFor(mass m: Int) -> Int {
         return max(0, m / 3 - 2)
     }
@@ -24,22 +24,26 @@ class SolverY2019D1 : Solvable {
         let rm = simpleFuelFor(mass: m)
         return rm > 0 ? rm + recursiveFuelFor(mass: rm) : rm
     }
-    
+
     func doPart1(withLog log: Log) -> Void {
-        var totalFuel = 0
-        masses.forEach {
-            totalFuel += simpleFuelFor(mass: $0)
-            log.debug(theMessage: "Interim mass is \(totalFuel).")
+        _ = timed(toLog: log) {
+            var totalFuel = 0
+            masses.forEach {
+                totalFuel += simpleFuelFor(mass: $0)
+                log.debug(theMessage: "Interim mass is \(totalFuel).")
+            }
+            log.solution(theMessage: "The sum of the fuel requirements for all modules is \(totalFuel) units.")
         }
-        log.solution(theMessage: "The sum of the fuel requirements for all modules is \(totalFuel) units.")
     }
 
     func doPart2(withLog log: Log) -> Void {
-        var totalFuel = 0
-        masses.forEach {
-            totalFuel += recursiveFuelFor(mass: $0)
-            log.debug(theMessage: "Interim mass is \(totalFuel).")
+        _ = timed(toLog: log) {
+            var totalFuel = 0
+            masses.forEach {
+                totalFuel += recursiveFuelFor(mass: $0)
+                log.debug(theMessage: "Interim mass is \(totalFuel).")
+            }
+            log.solution(theMessage: "The sum of the fuel requirements, accounting for fuel mass, is \(totalFuel) units.")
         }
-        log.solution(theMessage: "The sum of the fuel requirements, accounting for fuel mass, is \(totalFuel) units.")
     }
 }

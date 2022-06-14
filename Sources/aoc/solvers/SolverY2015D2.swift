@@ -22,21 +22,25 @@ class SolverY2015D2 : Solvable {
     }
 
     func doPart1(withLog log: Log) {
-        var sqft = 0
-        boxes.forEach { d in
-            let d2 = (d.l * d.w, d.w * d.h, d.h * d.l)
-            let sm = min(d2.0, min(d2.1, d2.2))
-            sqft += sm + (d2.0 * 2) + (d2.1 * 2) + (d2.2 * 2)
+        _ = timed(toLog: log) {
+            var sqft = 0
+            boxes.forEach { d in
+                let d2 = (d.l * d.w, d.w * d.h, d.h * d.l)
+                let sm = min(d2.0, min(d2.1, d2.2))
+                sqft += sm + (d2.0 * 2) + (d2.1 * 2) + (d2.2 * 2)
+            }
+            log.solution(theMessage: "The total square feet of wrapping paper to order is \(sqft) sqft.")
         }
-        log.solution(theMessage: "The total square feet of wrapping paper to order is \(sqft) sqft.")
     }
 
     func doPart2(withLog log: Log) {
-        var sqft = 0
-        boxes.forEach { d in
-            let a = Array([d.w, d.h, d.l]).sorted()
-            sqft += (a[0] * 2) + (a[1] * 2) + (d.w * d.h * d.l)
+        _ = timed(toLog:  log) {
+            var sqft = 0
+            boxes.forEach { d in
+                let a = Array([d.w, d.h, d.l]).sorted()
+                sqft += (a[0] * 2) + (a[1] * 2) + (d.w * d.h * d.l)
+            }
+            log.solution(theMessage: "The total feet of ribbon to order is \(sqft) sqft.")
         }
-        log.solution(theMessage: "The total feet of ribbon to order is \(sqft) sqft.")
     }
 }
