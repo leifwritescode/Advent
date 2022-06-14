@@ -4,7 +4,7 @@ DAY=
 
 all:
 ifndef DAY
-	$(error DAY should be set to a non-zero integer between 1 and 25 inclusive)
+	$(error DAY should be set to a non-zero integer between 1 and 25 inclusive (eg: make DAY=1))
 endif
 ifneq ($(wildcard day$(DAY)/.),)
 	kotlinc day$(DAY)/day$(DAY).kt -include-runtime -d bin/day$(DAY).jar
