@@ -75,17 +75,17 @@ class SolverY2020D18 : Solvable {
             .reduce(1, *)
     }
 
-    func doPart1(withLog log: Log) {
-        let sum = equations.reduce(0) { r, eq in
-            r + simplify(eq, solve)
+    func sum(_ fSolve: (String) -> Int) -> Int {
+        equations.reduce(0) { r, eq in
+            r + simplify(eq, fSolve)
         }
-        log.solution(theMessage: "The sum of the evaluated expressions is \(sum).")
+    }
+
+    func doPart1(withLog log: Log) {
+        log.solution(theMessage: "The sum of the evaluated expressions is \(sum(solve)).")
     }
 
     func doPart2(withLog log: Log) {
-        let sum = equations.reduce(0) { r, eq in
-            r + simplify(eq, solve2)
-        }
-        log.solution(theMessage: "The sum of the advanced evaluated expressions is \(sum).")
+        log.solution(theMessage: "The sum of the advanced evaluated expressions is \(sum(solve2)).")
     }
 }
