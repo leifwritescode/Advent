@@ -33,3 +33,11 @@ func RootDir(file_path string) string {
 		filepath.FromSlash(file_path))
 	return r
 }
+
+func Ctoi(c bool, t int, f int) int {
+	r := f
+	if c {
+		r = t
+	}
+	return r
+}
