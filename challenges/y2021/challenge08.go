@@ -116,32 +116,34 @@ func deduceEntry(input []string) []string {
 	output[8] = query_all.SingleWithT(func(s string) bool { return len(s) == 7 }).(string)
 
 	// we know that 0, 6 and 9 are all length 6
+	// and that 9 includes 7, 1, 4 and 5
+	// and that 0 is not 9, but includes 7 and 1
+	// and that six includes neither 7, 1 nor 4
+	// therefore 9 includes 4, 0 is not 9 and includes 1, and 6 is neither 9 nor 0.
 	query_length_six := query_all.WhereT(func(s string) bool { return len(s) == 6 })
 	output[9] = query_length_six.SingleWithT(func(s string) bool {
-		// and that 9 includes 7, 1 and 4
-		return stringContains(s, output[7]) && stringContains(s, output[1]) && stringContains(s, output[4])
+		return stringContains(s, output[4])
 	}).(string)
 	output[0] = query_length_six.SingleWithT(func(s string) bool {
-		// and that 0 includes 7 and 1, but not 4
-		return stringContains(s, output[7]) && stringContains(s, output[1]) && !stringContains(s, output[4])
+		return s != output[9] && stringContains(s, output[1])
 	}).(string)
 	output[6] = query_length_six.SingleWithT(func(s string) bool {
-		// therefore 0 is whatever remains once 9 and 0 are found
 		return s != output[9] && s != output[0]
 	}).(string)
 
 	// we know that 2, 3 and 5 are all length 5
+	// and that 3 includes 7 and 1
+	// and that 5 is contained by 9, but includes neither 7 nor 1
+	// and that 2 includes no other number
+	// therefore 3 includes 7 and 1, 5 is included by 9 but does not contain 1, and 2 is neither 3 nor 5.
 	query_length_five := query_all.WhereT(func(s string) bool { return len(s) == 5 })
 	output[3] = query_length_five.SingleWithT(func(s string) bool {
-		// and that 3 includes 7 and 1
 		return stringContains(s, output[7]) && stringContains(s, output[1])
 	}).(string)
 	output[5] = query_length_five.SingleWithT(func(s string) bool {
-		// and 5 is contained by 9, but does not include 7 or 1
-		return stringContains(output[9], s) && !stringContains(s, output[7]) && !stringContains(s, output[1])
+		return stringContains(output[9], s) && !stringContains(s, output[1])
 	}).(string)
 	output[2] = query_length_five.SingleWithT(func(s string) bool {
-		// therefore 2 is whatever remains once 3 and 5 are found
 		return s != output[3] && s != output[5]
 	}).(string)
 
