@@ -43,7 +43,7 @@ func Min32(a, b int) int {
 	return r
 }
 
-func max(a, b int) int {
+func Max(a, b int) int {
 	r := a
 	if a < b {
 		r = b
@@ -52,5 +52,5 @@ func max(a, b int) int {
 }
 
 func Clamp(v, l, h int) int {
-	return Min32(h, max(v, l))
+	return Min32(h, Max(v, l))
 }
