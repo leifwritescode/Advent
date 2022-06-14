@@ -11,8 +11,8 @@ class AdventArgs(parser: ArgParser) {
     ) { toInt() } .default(1)
     val inputDir by parser.storing(
         "-i", "--inputDir", help = "the directory from which to source inputs"
-    ) .default("src/main/kotlin/championofgoats/advent/2019/data")
+    ) .default("${System.getProperty("user.dir")}/data")
     val outputDir by parser.storing(
         "-o", "--outputDir", help = "the directory in which to store outputs"
-    ) .default("src/main/kotlin/championofgoats/advent/2019/day1")
+    ) .default("${System.getProperty("user.dir")}/data")
 }
