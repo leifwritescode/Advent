@@ -1,10 +1,8 @@
 package championofgoats.advent.twentynineteen.day1
 
 import java.io.File
-import java.util.stream.IntStream
 import championofgoats.advent.Problem
 import championofgoats.advent.utils.logging.Logger
-import championofgoats.advent.utils.logging.ConsoleLogger
 
 object Day1 : Problem {
     override fun solve(inputDir: String, outputDir: String, log: Logger)  {
