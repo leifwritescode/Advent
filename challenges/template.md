@@ -1,7 +1,7 @@
 ## Challenge template
 
 ```
-package challenges
+package y2021
 
 import (
 	"fmt"
@@ -9,10 +9,11 @@ import (
 	"strings"
 
 	utils "github.com/championofgoats/advent-of-gode/utilities"
+	"github.com/championofgoats/advent-of-gode/challenges"
 )
 
 type Challenge00 struct {
-	BaseChallenge
+	challenges.BaseChallenge
 	input []int
 }
 
@@ -35,6 +36,7 @@ func (challenge *Challenge00) SolvePartOne() string {
 func (challenge *Challenge00) SolvePartTwo() string {
 	return "not implemented"
 }
+
 ```
 
 In `cmd\aog\main.go`, in `init()`, add the following line (setting AA and BB as appropriate):
