@@ -7,6 +7,7 @@
 
 import Foundation
 
+@discardableResult
 func timed(toLog log: Log, _ closure: () -> Void) -> TimeInterval {
     log.debug(theMessage: "Starting timed execution.")
 
