@@ -8,13 +8,13 @@ object Mirror {
     private val years = hashMapOf(
     Pair(2019, "twentynineteen"))
     
-    fun findProblemsFor(year: Int, log: Logger) : List<Problem>? {
+    fun findProblem(year: Int, day: Int, log: Logger) : List<Problem>? {
         if (!years.containsKey(year)) {
             log.Warning("No package was found matching year %s.".format(year))
             return null
         }
         
-        val rgx = "championofgoats\\.advent\\.%s\\.day[0-9]{1,2}\\.Day[0-9]{1,2}".format(years[year]).toRegex()
+        val rgx = "championofgoats\\.advent\\.%s\\.day%d\\.Day%d".format(years[year], day, day).toRegex()
         val reflector = Reflections("championofgoats.advent.%s".format(years[year]))
         return reflector.getSubTypesOf(Problem::class.java)
         .filter {
