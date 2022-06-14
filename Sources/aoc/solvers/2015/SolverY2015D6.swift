@@ -22,7 +22,7 @@ class SolverY2015D6 : Solvable {
 
     required init(withLog log: Log, andInput input: String) {
         instructions = input.components(separatedBy: .newlines).compactMap { s in
-            if let g: [String] = try? s.groups(for: #"(\D*)\s(\d{1,3}),(\d{1,3})\D*(\d{1,3}),(\d{1,3})"#) {
+            if let g = s.groups(for: #"(\D*)\s(\d{1,3}),(\d{1,3})\D*(\d{1,3}),(\d{1,3})"#).first {
                 log.debug(theMessage: "\(g)")
 
                 let op: Operation

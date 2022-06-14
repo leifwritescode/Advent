@@ -49,11 +49,7 @@ class SolverY2016D4 : Solvable {
     private var rooms: [Room]
 
     required init(withLog log: Log, andInput input: String) {
-        guard let tRooms:[[String]] = try? input.groups(for: #"(\w.+)-(\d.+)\[(\w.+)\]"#) else {
-            rooms = Array()
-            return
-        }
-
+        let tRooms = input.groups(for: #"(\w.+)-(\d.+)\[(\w.+)\]"#)
         rooms = tRooms.compactMap { line in
             Room(line[0], line[1], line[2])
         }.filter { r in

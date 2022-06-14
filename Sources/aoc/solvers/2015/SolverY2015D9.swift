@@ -13,7 +13,7 @@ class SolverY2015D9 : Solvable {
     required init(withLog log: Log, andInput input: String) {
         var temp = [String:[(to: String, dist: Int)]]()
         input.components(separatedBy: .newlines).forEach { s in
-            if let g: [String] = try? s.groups(for: #"(\w*)\sto\s(\w*)\s=\s(\d*)"#) {
+            if let g = s.groups(for: #"(\w*)\sto\s(\w*)\s=\s(\d*)"#).first {
                 let d = Int(g[2])!
                 let t1 = (g[1], d), t0 = (g[0], d)
 

@@ -18,11 +18,7 @@ class SolverY2015D8 : Solvable {
         _ = timed(toLog: log) {
             let sumCode = literals.compactMap { s in s.count }.reduce(0, +)
             let sumCharacters = literals.compactMap { s in
-                var count: Int?
-                if let groups: [String] = try? s.groups(for: #"(\\"|\\x[0-9a-f]{2}|\\\\|\w)"#) {
-                    count = groups.count
-                }
-                return count
+                s.groups(for: #"(\\"|\\x[0-9a-f]{2}|\\\\|\w)"#).reduce([], +).count
             }.reduce(0, +)
             log.solution(theMessage: "The sum of the literal lengths minus the actual lengths is \(sumCode) - \(sumCharacters) = \(sumCode - sumCharacters).")
         }
