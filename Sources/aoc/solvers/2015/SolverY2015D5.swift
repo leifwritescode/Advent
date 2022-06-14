@@ -52,9 +52,3 @@ class SolverY2015D5 : Solvable {
         }
     }
 }
-
-extension String {
-    func matches(_ regex: String) -> Bool {
-        return self.range(of: regex, options: .regularExpression) != nil
-    }
-}

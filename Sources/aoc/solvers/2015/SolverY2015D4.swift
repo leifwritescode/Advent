@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import CryptoKit
 
 class SolverY2015D4 : Solvable {
     private let sema: DispatchSemaphore
@@ -85,18 +84,5 @@ class SolverY2015D4 : Solvable {
         _ = timed(toLog: log) {
             doTask(withPrefix: "000000", andLog: log, searchRange: 10000)
         }
-    }
-}
-
-extension String {
-    var MD5: String {
-        var result = ""
-        if #available(OSX 10.15, *) {
-            result = Insecure.MD5
-                .hash(data: self.data(using: .utf8)!)
-                .map { String(format: "%02hhx", $0) }
-                .joined()
-        }
-        return result
     }
 }
