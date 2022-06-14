@@ -106,8 +106,8 @@ func (c *Challenge13) fold(grid []common_math.Point, fold common_math.Point) []c
 func (c *Challenge13) extents(grid []common_math.Point) common_math.Point {
 	point := common_math.Point{X: 0, Y: 0}
 	for _, v := range grid {
-		point.X = common_math.Max(point.X, v.X)
-		point.Y = common_math.Max(point.Y, v.Y)
+		point.X = common_math.Max32(point.X, v.X)
+		point.Y = common_math.Max32(point.Y, v.Y)
 	}
 	return point
 }
