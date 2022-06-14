@@ -3,7 +3,6 @@ package challenges
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"math"
 	"strings"
 
@@ -38,9 +37,9 @@ func (c *Challenge15) Initialise(file_path string) error {
 
 // for a give point (x,y) return all adjacent points that are in bounds
 // there's a bug in here
-func (c *Challenge15) validAdjacents(val int) []int {
-	x := val % c.width
-	y := val / c.width
+func (c *Challenge15) validAdjacents(val, width, height int) []int {
+	x := val % width
+	y := val / width
 	valid := make([]int, 0)
 	offsets := []common_math.Point{
 		{X: -1, Y: 0},
@@ -56,8 +55,8 @@ func (c *Challenge15) validAdjacents(val int) []int {
 			Y: offset.Y + y,
 		}
 
-		if cell.X == common_math.Clamp(cell.X, 0, c.width-1) && cell.Y == common_math.Clamp(cell.Y, 0, c.height-1) {
-			valid = append(valid, cell.Y*c.width+cell.X)
+		if cell.X == common_math.Clamp(cell.X, 0, width-1) && cell.Y == common_math.Clamp(cell.Y, 0, height-1) {
+			valid = append(valid, cell.Y*width+cell.X)
 		}
 	}
 
@@ -66,9 +65,9 @@ func (c *Challenge15) validAdjacents(val int) []int {
 
 // function h(n), manhattan distance
 // remember - the risk levels can be thought of as a distance
-func (c *Challenge15) heuristic(from, from_value, to int) int {
-	x1, y1 := from%c.width, from/c.width
-	x2, y2 := to%c.width, to/c.width
+func (c *Challenge15) heuristic(from, from_value, to, w int) int {
+	x1, y1 := from%w, from/w
+	x2, y2 := to%w, to/w
 
 	return common_math.Abs(x1-x2) + common_math.Abs(y1-y2) + from_value
 }
@@ -112,7 +111,7 @@ func (c *Challenge15) remove(value int, from []int) []int {
 }
 
 // computes a path from the given array
-func (c *Challenge15) aStar(risk []int) []int {
+func (c *Challenge15) aStar(risk []int, width, height int) []int {
 	// The start node is the top left.
 	start := 0
 
@@ -135,7 +134,7 @@ func (c *Challenge15) aStar(risk []int) []int {
 	// For node n, fScore[n] := gScore[n] + h(n). fScore[n] represents our current best guess as to
 	// how short a path from start to finish can be if it goes through n.
 	f_score := map[int]int{}
-	f_score[start] = c.heuristic(start, 0, end)
+	f_score[start] = c.heuristic(start, 0, end, width)
 
 	for len(open_set) > 0 {
 		// This operation can occur in O(1) time if openSet is a min-heap or a priority queue
@@ -146,7 +145,7 @@ func (c *Challenge15) aStar(risk []int) []int {
 		}
 
 		open_set = c.remove(current, open_set)
-		neighbours := c.validAdjacents(current)
+		neighbours := c.validAdjacents(current, width, height)
 		for _, neighbour := range neighbours {
 			// d(current,neighbor) is the weight of the edge from current to neighbor
 			// tentative_gScore is the distance from start to the neighbor through current
@@ -165,7 +164,7 @@ func (c *Challenge15) aStar(risk []int) []int {
 			if tentative_g_score < g_score[neighbour] {
 				came_from[neighbour] = current
 				g_score[neighbour] = tentative_g_score
-				f_score[neighbour] = tentative_g_score + c.heuristic(neighbour, risk[neighbour], end)
+				f_score[neighbour] = tentative_g_score + c.heuristic(neighbour, risk[neighbour], end, width)
 
 				if !contains_i(open_set, neighbour) {
 					open_set = append(open_set, neighbour)
@@ -175,22 +174,7 @@ func (c *Challenge15) aStar(risk []int) []int {
 	}
 
 	// Open set is empty but goal was never reached
-	return nil
-}
-
-func (c *Challenge15) visualisePath(grid, path []int) {
-	for y := 0; y < c.height; y++ {
-		str := ""
-		for x := 0; x < c.width; x++ {
-			index := y*c.width + x
-			if contains_i(path, index) {
-				str = fmt.Sprintf("%s%d", str, grid[index])
-			} else {
-				str = fmt.Sprintf("%s%s", str, ".")
-			}
-		}
-		log.Println(str)
-	}
+	panic("didn't reach goal")
 }
 
 func (c *Challenge15) SolvePartOne() string {
@@ -198,40 +182,93 @@ func (c *Challenge15) SolvePartOne() string {
 	copy(grid, c.input)
 
 	sum := 0
-	path := c.aStar(grid)
+	path := c.aStar(grid, c.width, c.height)
 	for _, e := range path {
 		sum += grid[e]
 	}
 	return fmt.Sprintf("%d", sum)
 }
 
-func (c *Challenge15) createLargeMap() {
+func (c *Challenge15) createLargeMap() []int {
 	// the new map is five times larger in both dimensions
-	newWidth := c.width * 5
-	newHeight := c.height * 5
+	tiles_w := 5
+	tiles_h := 5
+	newWidth := c.width * tiles_w
+	newHeight := c.height * tiles_h
 	newMap := make([]int, newWidth*newHeight)
 
 	// first, let's insert the original map
 	for y := 0; y < c.height; y++ {
 		for x := 0; x < c.width; x++ {
-			i := y*c.width + x
-			newMap[i] = c.input[i]
+			i_old := y*c.width + x
+			i_new := y*newWidth + x
+			newMap[i_new] = c.input[i_old]
 		}
 	}
 
-	// then, we need to work out the remainder of the positions
-	for y := 0; y < newHeight; y++ {
-		for x := 0; x < newWidth; x++ {
-			// if the position is currently 0, it needs to be set appropriately
-			i := y*newWidth + x
-			if newMap[i] == 0 {
-				// find the tile that is c.width to the left and c.height above
+	// then, we can construct the first row -- the width is conveniently the number of tiles
+	for t := 1; t < tiles_w; t++ { // for each tile in the horizontal plane
+
+		for y := 0; y < c.height; y++ {
+			for x := 0; x < c.width; x++ {
+				off := (t - 1) * c.width
+
+				// get the old value and incremement
+				i_old := y*newWidth + x + off
+				value := newMap[i_old] + 1
+				if value > 9 {
+					value = 1
+				}
+
+				// get the new index and insert
+				i_new := y*newWidth + x + (t * c.width)
+				newMap[i_new] = value
 			}
 		}
 	}
-	c.input = newMap
+
+	// then, we can construct the remaining rows
+	for t_y := 1; t_y < tiles_h; t_y++ {
+		for t_x := 0; t_x < tiles_w; t_x++ {
+
+			// construct the tile using offsets
+			for y := 0; y < c.height; y++ {
+				for x := 0; x < c.width; x++ {
+
+					// the y line to read is a tile above so
+					// t_y - 1 is the title, then add y for the row we need, then multiply by new width
+					old_row := ((t_y-1)*c.height + y) * newWidth
+					col := t_x*c.width + x
+
+					// get the old value is c.height rows above
+					i_old := old_row + col
+					value := newMap[i_old] + 1
+					if value > 9 {
+						value = 1
+					}
+
+					// get the new index and insert
+					// the actual row is then t_y * c.height + y
+					new_row := (t_y*c.height + y) * newWidth
+					i_new := new_row + col
+					newMap[i_new] = value
+				}
+			}
+
+		}
+	}
+
+	return newMap
 }
 
 func (c *Challenge15) SolvePartTwo() string {
-	return "not implemented"
+	grid := c.createLargeMap()
+
+	sum := 0
+	path := c.aStar(grid, c.width*5, c.height*5)
+	for _, e := range path {
+		sum += grid[e]
+	}
+
+	return fmt.Sprintf("%d", sum)
 }
