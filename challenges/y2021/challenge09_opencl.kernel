@@ -1,0 +1,42 @@
+kernel void compute_map(global float *in,   // a heightmap, indexed as y*w+x, of lava tubes
+                        global float *out,  // a graph, indexed as y*w+x, of smoke flow
+                        float width,       // the width of the heightmap
+                        float size)        // the total size (w*h) of the heightmap
+{
+	// determine our index this_cell
+	size_t this_cell = get_global_id(0);
+
+	// find the adjacents
+	size_t up = this_cell - width;
+	size_t down = this_cell + width;
+	size_t left = this_cell - 1;
+	size_t right = this_cell + 1;
+
+	// just variables
+	size_t lowest_neighbour = this_cell;
+	float last = in[this_cell];
+
+	// check neighbours
+	if (up < size && in[up] <= last) {
+		lowest_neighbour = up;
+		last = in[up];
+	}
+
+	if (right < size && in[right] <= last) {
+		lowest_neighbour = right;
+		last = in[right];
+	}
+
+	if (down < size && in[down] <= last) {
+		lowest_neighbour = down;
+		last = in[down];
+	}
+
+	if (left < size && in[left] <= last) {
+		lowest_neighbour = left;
+		last = in[left];
+	}
+
+	// map that bad boy
+	out[this_cell] = lowest_neighbour;
+}

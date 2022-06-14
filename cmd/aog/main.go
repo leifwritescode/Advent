@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 
@@ -12,12 +13,14 @@ import (
 
 var (
 	showHelp bool
+	useGpu   bool
 	year     uint = 2021
 	day      uint = 1
 )
 
 func init() {
 	getopt.FlagLong(&showHelp, "help", 'h', "display help")
+	getopt.FlagLong(&useGpu, "gpu", 'g', "if implementation available, use gpu")
 	getopt.FlagLong(&year, "year", 'y', "the year from which to run challenges")
 	getopt.FlagLong(&day, "day", 'd', "the challenge to run")
 
@@ -48,6 +51,9 @@ func init() {
 	svc.NamedTransient("y2021d09", func() base.BaseChallenge {
 		return &impl.Challenge09{}
 	})
+	svc.NamedTransient("y2021d09gpu", func() base.BaseChallenge {
+		return &impl.Challenge09_OpenCL{}
+	})
 	svc.NamedTransient("y2021d10", func() base.BaseChallenge {
 		return &impl.Challenge10{}
 	})
@@ -63,9 +69,19 @@ func main() {
 
 	var challenge base.BaseChallenge
 	id := fmt.Sprintf("y%dd%02d", year, day)
-	if err := svc.NamedResolve(&challenge, id); err != nil {
-		str_err := fmt.Sprintf("no challenge found for day %02d of %d", day, year)
-		log.Fatalln(str_err)
+
+	var err error = errors.New("temp")
+	if useGpu {
+		// attempt to get a gpu capable version first
+		id_gpu := fmt.Sprintf("%sgpu", id)
+		err = svc.NamedResolve(&challenge, id_gpu)
+	}
+
+	if err != nil {
+		if err := svc.NamedResolve(&challenge, id); err != nil {
+			str_err := fmt.Sprintf("no challenge found for day %02d of %d", day, year)
+			log.Fatalln(str_err)
+		}
 	}
 
 	file_path := fmt.Sprintf("data/y%d/challenge%02d.in", year, day)
