@@ -36,4 +36,8 @@ struct Coordinate : Hashable, Comparable {
     static func < (_ lhs: Coordinate, _ rhs: Coordinate) -> Bool {
         return (lhs.x < rhs.x) || (lhs.y < rhs.y)
     }
+
+    static func * (_ lhs: Coordinate, _ rhs: Int) -> Coordinate {
+        return Coordinate(lhs.x * rhs, lhs.y * rhs)
+    }
 }
