@@ -1,4 +1,4 @@
-.PHONY: all
+.PHONY: all clean
 
 all:
 ifndef DAY
@@ -10,3 +10,7 @@ ifneq ($(wildcard day$(DAY)/.),)
 else
 	@echo "Solution does not exist for day $(DAY) problem."
 endif
+
+clean:
+	@echo "Cleaning up old JAR files..."
+	@find . -type f -name *.jar -exec rm {} \; -print
