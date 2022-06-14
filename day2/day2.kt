@@ -1,3 +1,5 @@
+package goats.aoc.day2
+
 import java.io.File
 import java.util.*
 

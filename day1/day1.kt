@@ -1,3 +1,5 @@
+package goats.aoc.day1
+
 import java.io.File
 
 // fuel for module of mass m is (m/3)-2
