@@ -1,7 +1,7 @@
 ## Challenge template
 
 ```
-package y2021
+package challenges
 
 import (
 	"fmt"
