@@ -23,4 +23,13 @@ struct Coordinate : Hashable {
         hasher.combine(x)
         hasher.combine(y)
     }
+
+    static func + (_ lhs: Coordinate, _ rhs: Coordinate) -> Coordinate {
+        return Coordinate(lhs.x + rhs.x, lhs.y + rhs.y)
+    }
+
+    static func += (_ lhs: inout Coordinate, _ rhs: Coordinate) {
+        lhs.x += rhs.x
+        lhs.y += rhs.y
+    }
 }
