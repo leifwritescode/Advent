@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"math"
 	"strconv"
 	"strings"
@@ -71,7 +70,7 @@ func edge(line lineSegment) ([]cmath.Point, error) {
 
 	// bail if not horizontal or vertical
 	if line.p1.X != line.p2.X && line.p1.Y != line.p2.Y {
-		return points, errors.New("Segment is not a horizontal or vertical line.")
+		return points, errors.New("segment is not a horizontal or vertical line")
 	}
 
 	// make sure p1 is less than p2
@@ -111,7 +110,7 @@ func edge_diag(line lineSegment) ([]cmath.Point, error) {
 
 	// don't process a line that isn't diagonal
 	if abs_px != abs_py {
-		return points, errors.New("Segment is not a diagonal line")
+		return points, errors.New("segment is not a diagonal line")
 	}
 
 	// we know here that abs_px and abs_py are the same, so they both represent the max
@@ -130,38 +129,6 @@ func edge_diag(line lineSegment) ([]cmath.Point, error) {
 	}
 
 	return points, nil
-}
-
-// Finds the extents of a set of coordinates, assuming the origin is at (0,0)
-func extents(p map[cmath.Point]int) cmath.Point {
-	e := cmath.Point{}
-	for i := range p {
-		t := i
-		if t.X > e.X {
-			e.X = t.X
-		}
-		if t.Y > e.Y {
-			e.Y = t.Y
-		}
-	}
-	return e
-}
-
-// Prints a visualisation of a map
-func print_vis(occupancy map[cmath.Point]int) {
-	e := extents(occupancy)
-	for y := 0; y <= e.Y; y++ {
-		str := ""
-		for x := 0; x <= e.X; x++ {
-			p := cmath.Point{Y: y, X: x}
-			if v, ok := occupancy[p]; ok {
-				str = fmt.Sprintf("%s%d", str, v)
-			} else {
-				str = fmt.Sprintf("%s.", str)
-			}
-		}
-		log.Println(str)
-	}
 }
 
 func (challenge *Challenge05) SolvePartOne() string {

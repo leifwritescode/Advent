@@ -20,11 +20,6 @@ type Challenge04 struct {
 	boards  [][]int
 }
 
-type bingoResponse struct {
-	index_of_final_value int
-	index_of_board       int
-}
-
 // this particular example initialises a simple integer array
 func (challenge *Challenge04) Initialise(file_path string) error {
 	bytes, err := ioutil.ReadFile(file_path)
@@ -122,7 +117,7 @@ func (challenge *Challenge04) SolvePartOne() string {
 		b.AppendRange(challenge.numbers[:i])
 
 		for j := 0; j < len(challenge.boards); j++ {
-			if bi, ok := challenge.bingo(b, j); ok != false {
+			if bi, ok := challenge.bingo(b, j); ok {
 
 				// we've found the first winner!
 				// we know that the number that caused the win was ...
