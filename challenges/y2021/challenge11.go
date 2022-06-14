@@ -112,7 +112,12 @@ func (c *Challenge11) doStep(jellies []int) (int, []int) {
 
 func (c *Challenge11) SolvePartOne() string {
 	flashes := 0
-	jellies := c.input
+
+	// arrays are assigned by reference always -- need to copy it
+	// shout outs to u/DistastyLengthiness for the pointer
+	jellies := make([]int, len(c.input))
+	copy(jellies, c.input)
+
 	for i := 0; i < 100; i++ {
 		t, j := c.doStep(jellies)
 		flashes += t
@@ -123,7 +128,9 @@ func (c *Challenge11) SolvePartOne() string {
 }
 
 func (c *Challenge11) SolvePartTwo() string {
-	jellies := c.input
+	jellies := make([]int, len(c.input))
+	copy(jellies, c.input)
+
 	steps := 0
 	flashes := 0
 	for flashes != len(jellies) {
