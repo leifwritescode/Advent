@@ -6,7 +6,7 @@
 
 plugins {
     // Apply the Kotlin JVM plugin to add support for Kotlin.
-    id("org.jetbrains.kotlin.jvm") version "1.3.41"
+    id("org.jetbrains.kotlin.jvm") version "1.3.61"
 
     // Apply the application plugin to add support for building a CLI application.
     application
@@ -26,14 +26,20 @@ dependencies {
     // Use the Kotlin JDK 8 standard library.
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    // Use kotlin-argparser?
+    // Use kotlin-argparser
     implementation("com.xenomachina:kotlin-argparser:2.0.7")
+
+    // Use reflections
+    implementation("org.reflections:reflections:0.9.11")
 
     // Use the Kotlin test library.
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 
     // Use the Kotlin JUnit integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+
+    // Use kotlin-reflect
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.3.61")
 }
 
 application {
