@@ -13,21 +13,39 @@ let maxDay = 25
 let minYear = 2015
 let maxYear = 2020
 
+enum SolverBehaviour : String, EnumerableFlag {
+    case both, first, second
+
+    static func name(for value: SolverBehaviour) -> NameSpecification {
+        return .long
+    }
+
+    static func help(for value: SolverBehaviour) -> ArgumentHelp? {
+        var help: String
+        switch (value) {
+        case .both:
+            help = "Run the complete solver."
+        case .first:
+            help = "Run first half of the solver only."
+        case .second:
+            help = "Run second half of the solver only."
+        }
+        return ArgumentHelp(stringLiteral: help)
+    }
+}
+
 struct Aoc: ParsableCommand {
     @Option(name: .shortAndLong, help: "The year from which to run a puzzle solver, between \(minYear) and \(maxYear) inclusive.")
-    var year: Int
+    var year: Int = minYear
 
     @Option(name: .shortAndLong, help: "The day for which to run the puzzle solver, between \(minDay) and \(maxDay) inclusive.")
-    var day: Int
+    var day: Int = minDay
 
     @Flag(name: .shortAndLong, help: "Include additional debug information in puzzle solver output.")
     var verbose = false
 
-    @Flag(name: .shortAndLong, help: "Run the first half of the solution only.")
-    var first: Bool = false
-
-    @Flag(name: .shortAndLong, help: "Run the second half of the solution only.")
-    var second: Bool = false
+    @Flag(exclusivity: FlagExclusivity.exclusive)
+    var behaviour: SolverBehaviour = .both
 
     mutating func validate() throws {
         guard Array(minYear...maxYear).contains(year) else {
@@ -36,10 +54,6 @@ struct Aoc: ParsableCommand {
 
         guard Array(minDay...maxDay).contains(day) else {
             throw ValidationError("'<day>' must be between \(minDay) and \(maxDay), inclusive.");
-        }
-
-        guard !(first && second) else {
-            throw ValidationError("[--first] and [--second] are mutually exclusive.")
         }
     }
 
@@ -60,11 +74,11 @@ struct Aoc: ParsableCommand {
 
         let solver = cls.init(withLog: log, andInput: input)
 
-        if (first || !second) {
+        if (behaviour == .first || behaviour == .both) {
             solver.doPart1(withLog: log)
         }
 
-        if (second || !first) {
+        if (behaviour == .second || behaviour == .both) {
             solver.doPart2(withLog: log)
         }
     }
