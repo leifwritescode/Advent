@@ -7,8 +7,8 @@ fun main(args: Array<String>) {
         return
     }
 
-    var dayp1ans = 0
-    var dayp2ans = 0
+    var day4p1ans = 0
+    var day4p2ans = 0
 
     var lowBound = 0
     var highBound = 0
@@ -27,10 +27,25 @@ fun main(args: Array<String>) {
             // if the results match, we've got a success!
             var sortTest = (fun (str: String) : String { var toSort = str.toCharArray(); toSort.sort(); return toSort.joinToString(""); })(cand)
             if (cand == sortTest)
-                dayp1ans += 1
+                day4p1ans += 1
         }
     }
 
-    println("DAYp1 ans = %d".format(dayp1ans))
-    println("DAYp2 ans = %d".format(dayp2ans))
+    // this regex finds 
+    digitPairTest = "(\\d)(\\1+)".toRegex()
+    for (i in lowBound..highBound) {
+        var cand = i.toString()
+        // find all matches, map down to group value, drop the first group (we don't care about the full match)
+        // if the digit appears twice, and only twice, it's a pass
+        if (digitPairTest.findAll(cand).any { it.groups.mapNotNull { m -> m?.value }.drop(1).joinToString("").length == 2 }) {
+            // this step is the same as for p1
+            // if the results match, we've got a success!
+            var sortTest = (fun (str: String) : String { var toSort = str.toCharArray(); toSort.sort(); return toSort.joinToString(""); })(cand)
+            if (cand == sortTest)
+                day4p2ans += 1
+        }
+    }
+
+    println("DAY4p1 ans = %d".format(day4p1ans))
+    println("DAY4p2 ans = %d".format(day4p2ans))
 }
