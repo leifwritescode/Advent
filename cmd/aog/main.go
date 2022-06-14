@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"log"
 
@@ -57,6 +56,9 @@ func init() {
 	svc.NamedTransient("y2021d10", func() base.BaseChallenge {
 		return &impl.Challenge10{}
 	})
+	svc.NamedTransient("y2021d12", func() base.BaseChallenge {
+		return &impl.Challenge12{}
+	})
 }
 
 func main() {
@@ -70,14 +72,9 @@ func main() {
 	var challenge base.BaseChallenge
 	id := fmt.Sprintf("y%dd%02d", year, day)
 
-	var err error = errors.New("temp")
-	if useGpu {
-		// attempt to get a gpu capable version first
-		id_gpu := fmt.Sprintf("%sgpu", id)
-		err = svc.NamedResolve(&challenge, id_gpu)
-	}
-
-	if err != nil {
+	// attempt to get a gpu capable version first
+	id_gpu := fmt.Sprintf("%sgpu", id)
+	if err := svc.NamedResolve(&challenge, id_gpu); !useGpu || err != nil {
 		if err := svc.NamedResolve(&challenge, id); err != nil {
 			str_err := fmt.Sprintf("no challenge found for day %02d of %d", day, year)
 			log.Fatalln(str_err)
