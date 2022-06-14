@@ -20,5 +20,5 @@ func BenchmarkChallenge03Part01(b *testing.B) {
 }
 
 func BenchmarkChallenge03Part02(b *testing.B) {
-	test.ExecuteSolutionPartTwoBenchmark(b, &challenges.Challenge01{}, "data/y2021/challenge03.in")
+	test.ExecuteSolutionPartTwoBenchmark(b, &challenges.Challenge03{}, "data/y2021/challenge03.in")
 }
