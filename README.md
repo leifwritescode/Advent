@@ -30,6 +30,8 @@ gradle run -q --args='-y 2019 -d 8 -o /tmp'
 ```
 This will execute solution 8, from 2019, and direct any file-based outputs to `/temp`.
 
+Unless `--inputDir` and/or `--outputDir` are specified, inputs/outputs will be sourced from/dumped to a subdirectory of the `pwd` named 'data'.
+
 ## Acknowledgements
 Thanks to Laurence Gonsalves, authour of the [kotlin-argparser](https://github.com/xenomachina/kotlin-argparser) library.
 
