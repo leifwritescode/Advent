@@ -3,13 +3,11 @@ package championofgoats.advent.twentynineteen.day3
 import java.io.File
 import java.util.*
 import championofgoats.advent.Problem
+import championofgoats.advent.utils.Point
 import championofgoats.advent.utils.logging.Logger
 
 object Day3 : Problem {
     override fun solve(inputDir: String, outputDir: String, log: Logger)  {
-        // a point in 2D space
-        data class Point(val x: Int, val y: Int)
-
         // given a two points describing an edge, append to l all points that are touched by the edge
         // return l
         fun appendEdge(l: MutableList<Point>, origin: Point, instruction: String) : MutableList<Point> {
