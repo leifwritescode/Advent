@@ -7,6 +7,7 @@
 
 import Foundation
 import Rainbow
+import aoclib
 
 class ConsoleLog : Log {
     let debug: Bool

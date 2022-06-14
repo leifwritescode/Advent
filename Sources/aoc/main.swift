@@ -7,11 +7,35 @@
 
 import Foundation
 import ArgumentParser
+import aoclib
 
 let minDay = 1
 let maxDay = 25
 let minYear = 2015
 let maxYear = 2020
+
+@discardableResult func timed(toLog log: Log, _ closure: () -> Void) -> TimeInterval {
+    log.info(theMessage: "Starting timed execution.")
+
+    let start = Date()
+    closure()
+    let end = Date()
+
+    let delta = end.timeIntervalSince(start)
+    let deltaAsString: String
+    if (delta < 1) {
+        deltaAsString = "<1s"
+    } else {
+        let f = DateComponentsFormatter()
+        f.unitsStyle = .full
+        f.allowedUnits = [.hour, .minute, .second]
+        deltaAsString = f.string(from: delta)!
+    }
+
+    log.info(theMessage: "Done. Execution took \(deltaAsString).")
+    return delta
+}
+
 
 enum SolverBehaviour : String, EnumerableFlag {
     case both, first, second
@@ -55,7 +79,7 @@ extension Aoc {
 
                 var list = [String]()
                 for day in minDay...maxDay {
-                    let fqcn = "aoc.SolverY\(year)D\(day)"
+                    let fqcn = "aoclib.SolverY\(year)D\(day)"
                     if let cls = NSClassFromString(fqcn) as? Solvable.Type {
                         list.append("\tDay \(day): \(cls.description).")
                     }
@@ -122,13 +146,13 @@ extension Aoc {
             print("Event Year \(year); Day \(day): \(cls.description).\n")
 
             if (behaviour == .first || behaviour == .both) {
-                Functions.timed(toLog: log) {
+                timed(toLog: log) {
                     solver.doPart1(withLog: log)
                 }
             }
 
             if (behaviour == .second || behaviour == .both) {
-                Functions.timed(toLog: log) {
+                timed(toLog: log) {
                     solver.doPart2(withLog: log)
                 }
             }

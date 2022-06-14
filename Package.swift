@@ -10,6 +10,9 @@ let package = Package(
         .executable(
             name: "aoc",
             targets: ["aoc"]),
+        .library(
+            name: "aoclib",
+            targets: ["aoclib"])
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -25,11 +28,15 @@ let package = Package(
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "Rainbow", package: "Rainbow"),
+                .target(name: "aoclib")
             ]),
+        .target(
+            name: "aoclib",
+            dependencies: []),
         .testTarget(
             name: "aoc-test",
             dependencies: [
-                .target(name: "aoc")
+                .target(name: "aoclib")
             ])
     ]
 )

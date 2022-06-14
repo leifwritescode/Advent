@@ -6,6 +6,7 @@
 //
 
 import Foundation
+@testable import aoclib
 
 class MockLog : Log {
     private var lastSolution: String
