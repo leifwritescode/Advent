@@ -33,6 +33,9 @@ func init() {
 	svc.NamedTransient("y2021d04", func() base.BaseChallenge {
 		return &impl.Challenge04{}
 	})
+	svc.NamedTransient("y2021d05", func() base.BaseChallenge {
+		return &impl.Challenge05{}
+	})
 }
 
 func main() {
