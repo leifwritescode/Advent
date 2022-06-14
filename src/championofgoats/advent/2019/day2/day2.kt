@@ -1,4 +1,4 @@
-package goats.aoc.day2
+package championofgoats.advent.twentynineteen.day2
 
 import java.io.File
 import java.util.*

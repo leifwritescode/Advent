@@ -1,6 +1,6 @@
-package goats.aoc.iclang
+package championofgoats.advent.twentynineteen.utils.iclang
 
-import goats.aoc.logging.Logger
+import championofgoats.advent.utils.logging.Logger
 
 // An IntCodeLang (ICLang) computer
 // ICLang is a destructive language - each instuction may change the program

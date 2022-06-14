@@ -1,8 +1,8 @@
-package goats.aoc.day5
+package championofgoats.advent.twentynineteen.day5
 
 import java.io.File
-import goats.aoc.iclang.ICLMachine
-import goats.aoc.logging.ConsoleLogger
+import championofgoats.advent.twentynineteen.utils.iclang.ICLMachine
+import championofgoats.advent.utils.logging.ConsoleLogger
 
 fun main(args: Array<String>) {
     if (args.size != 1) {

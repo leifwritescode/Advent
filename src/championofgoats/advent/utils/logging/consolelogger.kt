@@ -1,4 +1,4 @@
-package goats.aoc.logging
+package championofgoats.advent.utils.logging
 
 class ConsoleLogger : Logger {
     override fun Debug(m: String) {
