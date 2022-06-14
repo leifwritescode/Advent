@@ -12,6 +12,16 @@ class SolverY2020D11 : Solvable {
 
     let extents: Coordinate
     let occupied: [Coordinate:Bool]
+    let offsets = [
+        Coordinate(1, 0),
+        Coordinate(-1, 0),
+        Coordinate(0, 1),
+        Coordinate(0, -1),
+        Coordinate(1, 1),
+        Coordinate(1, -1),
+        Coordinate(-1, 1),
+        Coordinate(-1, -1)
+    ]
 
     required init(withLog log: Log, andInput input: String) {
         var temp = [Coordinate:Bool]()
@@ -40,28 +50,15 @@ class SolverY2020D11 : Solvable {
         return field.keys.contains(next) ? next : rFirstVis(field, next, offset)
     }
 
-    func getFirstVisAdjacents(_ field: [Coordinate:Bool], _ coord: Coordinate) -> [Coordinate?] {
-        return [rFirstVis(field, coord, Coordinate(-1, 0)),
-                rFirstVis(field, coord, Coordinate(1, 0)),
-                rFirstVis(field, coord, Coordinate(0, -1)),
-                rFirstVis(field, coord, Coordinate(0, 1)),
-                rFirstVis(field, coord, Coordinate(-1, -1)),
-                rFirstVis(field, coord, Coordinate(-1, 1)),
-                rFirstVis(field, coord, Coordinate(1, -1)),
-                rFirstVis(field, coord, Coordinate(1, 1))]
+    func getFirstVisAdjacents(_ me: Coordinate, _ layout: [Coordinate:Bool]) -> Int {
+        // This can be optimised further.
+        return offsets.reduce(0) { r, c in r + (layout[rFirstVis(layout, me, c) ?? Coordinate(-1, -1)] ?? false ? 1 : 0) }
     }
-    
-    func getAdjacents(_ x: Int, _ y: Int) -> [Coordinate] {
-        return [Coordinate(x - 1, y),
-                Coordinate(x + 1, y),
-                Coordinate(x, y - 1),
-                Coordinate(x, y + 1),
-                Coordinate(x - 1, y - 1),
-                Coordinate(x - 1, y + 1),
-                Coordinate(x + 1, y - 1),
-                Coordinate(x + 1, y + 1)]
+
+    func getAdjacents(_ me: Coordinate, _ layout: [Coordinate:Bool]) -> Int {
+        return offsets.reduce(0) { r, c in r + (layout[me + c] ?? false ? 1 : 0) }
     }
-    
+
     func doPart1(withLog log: Log) {
         var current = occupied
         var applied = [Coordinate:Bool]()
@@ -73,9 +70,7 @@ class SolverY2020D11 : Solvable {
             }
 
             current.forEach { seat, state in
-                let adjacents = getAdjacents(seat.x, seat.y).filter { c in
-                    current.keys.contains(c) && current[c]!
-                }.count
+                let adjacents = getAdjacents(seat, current)
 
                 // A seat becomes occupied if it is empty and no occupied seats adjacent
                 // A seat becomes vacant if > 3 occupied seats adjacent
@@ -98,9 +93,7 @@ class SolverY2020D11 : Solvable {
             }
 
             current.forEach { seat, state in
-                let adjacents = getFirstVisAdjacents(current, seat).filter { c in
-                    c != nil && current.keys.contains(c!) && current[c!]!
-                }.count
+                let adjacents = getFirstVisAdjacents(seat, current)
 
                 // A seat becomes occupied if it is empty and no occupied seats adjacent
                 // A seat becomes vacant if > 3 occupied seats adjacent
