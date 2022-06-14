@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	impl "github.com/championofgoats/advent-of-gode/challenges"
-	"github.com/championofgoats/advent-of-gode/challenges/y2021"
+	base "github.com/championofgoats/advent-of-gode/challenges"
+	impl "github.com/championofgoats/advent-of-gode/challenges/y2021"
 	svc "github.com/golobby/container/v3"
 	"github.com/pborman/getopt/v2"
 )
@@ -21,14 +21,14 @@ func init() {
 	getopt.FlagLong(&year, "year", 'y', "the year from which to run challenges")
 	getopt.FlagLong(&day, "day", 'd', "the challenge to run")
 
-	svc.NamedTransient("y2021d01", func() impl.BaseChallenge {
-		return &y2021.Challenge01{}
+	svc.NamedTransient("y2021d01", func() base.BaseChallenge {
+		return &impl.Challenge01{}
 	})
-	svc.NamedTransient("y2021d02", func() impl.BaseChallenge {
-		return &y2021.Challenge02{}
+	svc.NamedTransient("y2021d02", func() base.BaseChallenge {
+		return &impl.Challenge02{}
 	})
-	svc.NamedTransient("y2021d03", func() impl.BaseChallenge {
-		return &y2021.Challenge03{}
+	svc.NamedTransient("y2021d03", func() base.BaseChallenge {
+		return &impl.Challenge03{}
 	})
 }
 
@@ -40,7 +40,7 @@ func main() {
 		return
 	}
 
-	var challenge impl.BaseChallenge
+	var challenge base.BaseChallenge
 	id := fmt.Sprintf("y%dd%02d", year, day)
 	if err := svc.NamedResolve(&challenge, id); err != nil {
 		str_err := fmt.Sprintf("no challenge found for day %02d of %d", day, year)
