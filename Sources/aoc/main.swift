@@ -35,52 +35,103 @@ enum SolverBehaviour : String, EnumerableFlag {
 }
 
 struct Aoc: ParsableCommand {
-    @Option(name: .shortAndLong, help: "The year from which to run a puzzle solver, between \(minYear) and \(maxYear) inclusive.")
-    var year: Int = minYear
+    static var configuration = CommandConfiguration(
+        abstract: "Leif Walker-Grant's Advent of Code solutions in Swift.",
+        version: "v20.11",
+        subcommands: [List.self, Solve.self],
+        defaultSubcommand: List.self
+    )
+}
 
-    @Option(name: .shortAndLong, help: "The day for which to run the puzzle solver, between \(minDay) and \(maxDay) inclusive.")
-    var day: Int = minDay
+extension Aoc {
+    struct List: ParsableCommand {
+        static var configuration = CommandConfiguration(
+            abstract: "List all available solvers."
+        )
 
-    @Flag(name: .shortAndLong, help: "Include additional debug information in puzzle solver output.")
-    var verbose = false
+        mutating func run() throws {
+            for year in minYear...maxYear {
+                print("Event Year \(year):")
 
-    @Flag(exclusivity: FlagExclusivity.exclusive)
-    var behaviour: SolverBehaviour = .both
+                var list = [String]()
+                for day in minDay...maxDay {
+                    let fqcn = "aoc.SolverY\(year)D\(day)"
+                    if let cls = NSClassFromString(fqcn) as? Solvable.Type {
+                        list.append("\tDay \(day): \(cls.description).")
+                    }
+                }
 
-    mutating func validate() throws {
-        guard Array(minYear...maxYear).contains(year) else {
-            throw ValidationError("'<year>' must be between \(minYear) and \(maxYear), inclusive.")
-        }
+                if list.count != 0 {
+                    list.forEach { s in print(s) }
+                } else {
+                    print("\tNone.")
+                }
 
-        guard Array(minDay...maxDay).contains(day) else {
-            throw ValidationError("'<day>' must be between \(minDay) and \(maxDay), inclusive.");
+                print("")
+            }
         }
     }
+}
 
-    mutating func run() throws {
-        let fqcn = "aoc.SolverY\(year)D\(day)"
-        let dataFilePath = "data/\(year)/day\(day).in"
-        let log = ConsoleLog(enableDebug: verbose)
+extension Aoc {
+    struct Solve: ParsableCommand {
+        static var configuration = CommandConfiguration(
+            abstract: "Run a solver."
+        )
 
-        guard let cls = NSClassFromString(fqcn) as? Solvable.Type else {
-            log.error(theMessage: "No solver was found for \(day)/12/\(year)'s puzzle.")
-            return
+        @Option(name: .shortAndLong, help: "The year from which to run a puzzle solver, between \(minYear) and \(maxYear) inclusive.")
+        var year: Int = minYear
+
+        @Option(name: .shortAndLong, help: "The day for which to run the puzzle solver, between \(minDay) and \(maxDay) inclusive.")
+        var day: Int = minDay
+
+        @Flag(exclusivity: FlagExclusivity.exclusive)
+        var behaviour: SolverBehaviour = .both
+
+        @Flag(name: .shortAndLong, help: "Include additional debug information in puzzle solver output.")
+        var verbose = false
+
+        mutating func validate() throws {
+            guard Array(minYear...maxYear).contains(year) else {
+                throw ValidationError("'<year>' must be between \(minYear) and \(maxYear), inclusive.")
+            }
+
+            guard Array(minDay...maxDay).contains(day) else {
+                throw ValidationError("'<day>' must be between \(minDay) and \(maxDay), inclusive.");
+            }
         }
 
-        guard var input = try? String(contentsOfFile: dataFilePath) else {
-            log.error(theMessage: "Unable to read the input data file '\(dataFilePath)'.")
-            return
-        }
+        mutating func run() throws {
+            let fqcn = "aoc.SolverY\(year)D\(day)"
+            let dataFilePath = "data/\(year)/day\(day).in"
+            let log = ConsoleLog(enableDebug: verbose)
 
-        input = input.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-        let solver = cls.init(withLog: log, andInput: input)
+            guard let cls = NSClassFromString(fqcn) as? Solvable.Type else {
+                log.error(theMessage: "No solver was found for \(day)/12/\(year)'s puzzle.")
+                return
+            }
 
-        if (behaviour == .first || behaviour == .both) {
-            solver.doPart1(withLog: log)
-        }
+            guard var input = try? String(contentsOfFile: dataFilePath) else {
+                log.error(theMessage: "Unable to read the input data file '\(dataFilePath)'.")
+                return
+            }
 
-        if (behaviour == .second || behaviour == .both) {
-            solver.doPart2(withLog: log)
+            input = input.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+            let solver = cls.init(withLog: log, andInput: input)
+
+            print("Day \(day): \(cls.description).\n")
+
+            if (behaviour == .first || behaviour == .both) {
+                _ = timed(toLog: log) {
+                    solver.doPart1(withLog: log)
+                }
+            }
+
+            if (behaviour == .second || behaviour == .both) {
+                _ = timed(toLog: log) {
+                    solver.doPart2(withLog: log)
+                }
+            }
         }
     }
 }

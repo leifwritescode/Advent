@@ -6,6 +6,8 @@
 //
 
 protocol Solvable {
+    static var description: String { get }
+
     init (withLog log: Log, andInput input: String)
 
     func doPart1(withLog log: Log) -> Void

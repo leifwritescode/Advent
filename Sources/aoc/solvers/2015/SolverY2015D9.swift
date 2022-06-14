@@ -8,6 +8,8 @@
 import Foundation
 
 class SolverY2015D9 : Solvable {
+    static var description = "All in a Single Night"
+
     private let graph: [String:[(to: String, dist: Int)]]
 
     required init(withLog log: Log, andInput input: String) {
@@ -45,27 +47,22 @@ class SolverY2015D9 : Solvable {
     }
 
     func doPart1(withLog log: Log) {
-        _ = timed(toLog: log) {
-            let shortest: (String, Int) = graph.keys.compactMap { k in
-                log.info(theMessage: "Plotting longest route from \(k).")
-                return (k, recursiveTsp(k, Array(graph.keys), log) { a, b in a.1 < b.1 })
-            }.sorted { a, b in
-                a.1 < b.1
-            }.first!
-            log.solution(theMessage: "The shortest route is \(shortest.1) km, from \(shortest.0).")
-        }
+        let shortest: (String, Int) = graph.keys.compactMap { k in
+            log.info(theMessage: "Plotting longest route from \(k).")
+            return (k, recursiveTsp(k, Array(graph.keys), log) { a, b in a.1 < b.1 })
+        }.sorted { a, b in
+            a.1 < b.1
+        }.first!
+        log.solution(theMessage: "The shortest route is \(shortest.1) km, from \(shortest.0).")
     }
 
     func doPart2(withLog log: Log) {
-        _ = timed(toLog: log) {
-
-            let longest: (String, Int) = graph.keys.compactMap { k in
-                log.info(theMessage: "Plotting longest route from \(k).")
-                return (k, recursiveTsp(k, Array(graph.keys), log) { a, b in a.1 > b.1 })
-            }.sorted { a, b in
-                a.1 > b.1
-            }.first!
-            log.solution(theMessage: "The longest route is \(longest.1) km, from \(longest.0).")
-        }
+        let longest: (String, Int) = graph.keys.compactMap { k in
+            log.info(theMessage: "Plotting longest route from \(k).")
+            return (k, recursiveTsp(k, Array(graph.keys), log) { a, b in a.1 > b.1 })
+        }.sorted { a, b in
+            a.1 > b.1
+        }.first!
+        log.solution(theMessage: "The longest route is \(longest.1) km, from \(longest.0).")
     }
 }

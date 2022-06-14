@@ -8,6 +8,8 @@
 import Foundation
 
 class SolverY2016D6 : Solvable {
+    static var description = "Signals and Noise"
+
     let signals: [[String]]
 
     required init(withLog log: Log, andInput input: String) {
@@ -21,40 +23,37 @@ class SolverY2016D6 : Solvable {
     }
 
     func doPart1(withLog log: Log) {
-        _ = timed(toLog: log) {
-            let ecMessage = signals.compactMap { line in
-                let next = line.compactMap { s in s  }
-                    .sorted()
-                    .joined()
-                    .splitOnNewCharacter()
-                    .sorted { a, b in
-                        a.count > b.count
-                    }
-                    .first!
-                    .first!
-                return String(next)
-            }.joined()
+        let ecMessage = signals.compactMap { line in
+            let next = line.compactMap { s in s  }
+                .sorted()
+                .joined()
+                .splitOnNewCharacter()
+                .sorted { a, b in
+                    a.count > b.count
+                }
+                .first!
+                .first!
+            return String(next)
+        }.joined()
 
-            log.solution(theMessage: "The error-corrected SRC message is '\(ecMessage).'")
-        }
+        log.solution(theMessage: "The error-corrected SRC message is '\(ecMessage).'")
     }
 
     func doPart2(withLog log: Log) {
-        _ = timed(toLog: log) {
-            let ecMessage = signals.compactMap { line in
-                let next = line.compactMap { s in s  }
-                    .sorted()
-                    .joined()
-                    .splitOnNewCharacter()
-                    .sorted { a, b in
-                        a.count > b.count
-                    }
-                    .last!
-                    .first!
-                return String(next)
-            }.joined()
+        let ecMessage = signals.compactMap { line in
+            let next = line.compactMap { s in s  }
+                .sorted()
+                .joined()
+                .splitOnNewCharacter()
+                .sorted { a, b in
+                    a.count > b.count
+                }
+                .last!
+                .first!
+            return String(next)
+        }.joined()
 
-            log.solution(theMessage: "The error-corrected MRC message is '\(ecMessage).'")
-        }
+        log.solution(theMessage: "The error-corrected MRC message is '\(ecMessage).'")
+        
     }
 }

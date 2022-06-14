@@ -8,6 +8,8 @@
 import Foundation
 
 class SolverY2016D3 : Solvable {
+    static var description = "Squares With Three Sides"
+
     private let sides: [Int]
 
     required init(withLog log: Log, andInput input: String) {
@@ -21,31 +23,27 @@ class SolverY2016D3 : Solvable {
     }
 
     func doPart1(withLog log: Log) {
-        _ = timed(toLog: log) {
-            var valid = 0
-            for v in stride(from: 0, to: sides.count, by: 3) {
-                if (isValidTriangle(sides[v], sides[v+1], sides[v+2])) {
-                    valid += 1
-                }
+        var valid = 0
+        for v in stride(from: 0, to: sides.count, by: 3) {
+            if (isValidTriangle(sides[v], sides[v+1], sides[v+2])) {
+                valid += 1
             }
-
-            log.solution(theMessage: "Exactly \(valid) triangles are valid.")
         }
+
+        log.solution(theMessage: "Exactly \(valid) triangles are valid.")
     }
-
+    
     func doPart2(withLog log: Log) {
-        _ = timed(toLog: log) {
-            let w = 3
-            let transposed = transpose1d(array: sides, width: w, height: sides.count / w)
+        let w = 3
+        let transposed = transpose1d(array: sides, width: w, height: sides.count / w)
 
-            var valid = 0
-            for v in stride(from: 0, to: transposed.count, by: 3) {
-                if (isValidTriangle(transposed[v], transposed[v+1], transposed[v+2])) {
-                    valid += 1
-                }
+        var valid = 0
+        for v in stride(from: 0, to: transposed.count, by: 3) {
+            if (isValidTriangle(transposed[v], transposed[v+1], transposed[v+2])) {
+                valid += 1
             }
-
-            log.solution(theMessage: "Exactly \(valid) triangles are valid.")
         }
+
+        log.solution(theMessage: "Exactly \(valid) triangles are valid.")
     }
 }

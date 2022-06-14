@@ -110,6 +110,8 @@ fileprivate class Instruction : CustomStringConvertible {
 }
 
 class SolverY2015D7 : Solvable {
+    static var description = "Some Assembly Required"
+
     private let instructions: [Instruction]
 
     required init(withLog log: Log, andInput input: String) {
@@ -140,14 +142,10 @@ class SolverY2015D7 : Solvable {
     }
 
     func doPart1(withLog log: Log) {
-        _ = timed(toLog: log) {
-            runProgram(withLog: log, outputAt: "a")
-        }
+        runProgram(withLog: log, outputAt: "a")
     }
 
     func doPart2(withLog log: Log) {
-        _ = timed(toLog: log) {
-            runProgram(withLog: log, outputAt: "a") { r in r["b"] = 16076 }
-        }
+        runProgram(withLog: log, outputAt: "a") { r in r["b"] = 16076 }
     }
 }
