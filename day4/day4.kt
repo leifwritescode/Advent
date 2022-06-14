@@ -37,7 +37,7 @@ fun main(args: Array<String>) {
         var cand = i.toString()
         // find all matches, map down to group value, drop the first group (we don't care about the full match)
         // if the digit appears twice, and only twice, it's a pass
-        if (digitPairTest.findAll(cand).any { it.groups.mapNotNull { m -> m?.value }.drop(1).joinToString("").length == 2 }) {
+        if (digitPairTest.findAll(cand).any { it.groups.drop(1).mapNotNull { m -> m?.value }.joinToString("").length == 2 }) {
             // this step is the same as for p1
             // if the results match, we've got a success!
             var sortTest = (fun (str: String) : String { var toSort = str.toCharArray(); toSort.sort(); return toSort.joinToString(""); })(cand)
