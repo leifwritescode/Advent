@@ -1,7 +1,7 @@
 package championofgoats.advent.utils
 
 // Get the greatest common divisor of two digits
-fun gcd(a: Int, b: Int) : Int = if (b == 0) 0 else gcd(b, a % b)
+fun gcd(a: Int, b: Int) : Int = if (b == 0) a else gcd(b, a % b)
 
 // Get an identity matrix
 // Points P where the 1-dimensional index i = (i % size) * size (i % size) have value 1.0
