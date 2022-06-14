@@ -67,11 +67,12 @@ struct Aoc: ParsableCommand {
             return
         }
 
-        guard let input = try? String(contentsOfFile: dataFilePath) else {
+        guard var input = try? String(contentsOfFile: dataFilePath) else {
             log.error(theMessage: "Unable to read the input data file '\(dataFilePath)'.")
             return
         }
 
+        input = input.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         let solver = cls.init(withLog: log, andInput: input)
 
         if (behaviour == .first || behaviour == .both) {
