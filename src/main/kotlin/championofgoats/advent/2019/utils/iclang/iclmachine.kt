@@ -36,17 +36,6 @@ class ICLMachine(val log: Logger, val program: List<Int>, var supportState: Bool
     
     // Run an ICLang program
     fun exec(inputs: List<Int>): List<Int> {
-        // Given an ICLang op, in integer form, convert to the Opcode representation
-        fun parsIclOp(input: Int): Opcode {
-            return Opcode.values().find { it.op == input % 100 } ?: Opcode.ERR
-        }
-        
-        // Converts from integers to parammode enum
-        fun parsePMode(input: Char): ParamMode {
-            val pLong = input.toString().toInt()
-            return ParamMode.values().find { it.mode == pLong } ?: ParamMode.ERR
-        }
-        
         // If we're resuming, and we're stateful, we need to force ourselves out of paused execution
         lastOp = Opcode.ERR
         
@@ -58,10 +47,12 @@ class ICLMachine(val log: Logger, val program: List<Int>, var supportState: Bool
         
         // Main execution loop - keep going until we pause, for whatever reason, or the application halts
         while (!aborted && !paused() && ip != null) {
-            val op = parsIclOp(tempMemory[ip!!])
+            // Given an ICLang op, in integer form, convert to the Opcode representation
+            val op = tempMemory[ip!!].let { val i = it; Opcode.values().find { it.op == i % 100 } ?: Opcode.ERR }
             val ins = ICLangOp(this, op,
             (1 until op.nParams).map { tempMemory[ip!! + it] },
-            (tempMemory[ip!!] / 100).toString().padStart(op.nParams - 1, '0').map { parsePMode(it) }.asReversed())
+            // Take the params (first three digits), separate, map to ParamModes
+            (tempMemory[ip!!] / 100).let { listOf<Int>(it % 10, (it / 10) % 10, it / 100).map { val i = it; ParamMode.values().find { it.mode == i } ?: ParamMode.ERR }})
             
             ip = ins.exec(ip!!, tempMemory, input, output)
             lastOp = op
