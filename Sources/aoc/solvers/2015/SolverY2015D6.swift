@@ -7,11 +7,6 @@
 
 import Foundation
 
-fileprivate struct Point {
-    var x: Int
-    var y: Int
-}
-
 fileprivate enum Operation {
     case on, off, toggle
 }
@@ -43,8 +38,8 @@ class SolverY2015D6 : Solvable {
                     return nil // TODO: better than this
                 }
 
-                let p1 = Point(x: Int(g[1])!, y: Int(g[2])!)
-                let p2 = Point(x: Int(g[3])!, y: Int(g[4])!)
+                let p1 = Point(Int(g[1])!, Int(g[2])!)
+                let p2 = Point(Int(g[3])!, Int(g[4])!)
 
                 return (o: op, b: b, xy1: p1, xy2: p2)
             }
