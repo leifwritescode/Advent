@@ -151,7 +151,7 @@ func (c *Challenge09) SolvePartOne() string {
 
 // given the location of a basin, find total length of all
 // called recursively
-func (c *Challenge09) bfsTracePath(p common_math.Point) []common_math.Point {
+func (c *Challenge09) dfsTracePath(p common_math.Point) []common_math.Point {
 	// for a given point, p,  we need to find all points that lead to this point (except ourselves if we're a basin)
 	// given a map [a] => b where b is the destination and a is the origin
 	// if a == p then b is a basin
@@ -163,7 +163,7 @@ func (c *Challenge09) bfsTracePath(p common_math.Point) []common_math.Point {
 	for a, b := range c.lava_tube_map {
 		height := c.input[a.Y*c.width+a.X]
 		if b == p && a != p && height != 9 {
-			result = append(result, c.bfsTracePath(a)...)
+			result = append(result, c.dfsTracePath(a)...)
 		}
 	}
 
@@ -207,7 +207,7 @@ func (c *Challenge09) SolvePartTwo() string {
 	for k, v := range c.lava_tube_map {
 		// basins lead to themselves
 		if k == v {
-			path := c.bfsTracePath(k)
+			path := c.dfsTracePath(k)
 
 			// uncomment me to visualise the basin
 			// c.visualiseBasin(path)
