@@ -1,4 +1,4 @@
-package goats.aoc.logging
+package championofgoats.advent.utils.logging
 
 interface Logger {
     fun Debug(m: String)

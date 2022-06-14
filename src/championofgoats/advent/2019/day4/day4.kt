@@ -1,4 +1,4 @@
-package goats.aoc.day4
+package championofgoats.advent.twentynineteen.day4
 
 import java.io.File
 import kotlin.text.Regex
