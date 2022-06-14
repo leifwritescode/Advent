@@ -17,6 +17,8 @@ fileprivate enum Operation {
 }
 
 class SolverY2015D6 : Solvable {
+    static var description = "Probably a Fire Hazard"
+
     private let w = 1000
     private let instructions: [(o: Operation, b: Int, xy1: Point, xy2: Point)]
 
@@ -51,56 +53,52 @@ class SolverY2015D6 : Solvable {
     }
 
     func doPart1(withLog log: Log) {
-        _ = timed(toLog: log) {
-            var grid = Array(repeating: false, count: w * w)
+        var grid = Array(repeating: false, count: w * w)
 
-            func unset(i: Int) {
-                grid[i] = false
-            }
-
-            func set(i: Int) {
-                grid[i] = true
-            }
-
-            func toggle(i: Int) {
-                grid[i] = !grid[i]
-            }
-
-            instructions.forEach { t in
-                let act: (Int) -> Void
-                switch (t.o) {
-                case .on:
-                    act = set
-                case .off:
-                    act = unset
-                case .toggle:
-                    act = toggle
-                }
-                
-                for x in t.xy1.x...(t.xy2.x) {
-                    for y in t.xy1.y...(t.xy2.y) {
-                        act(y * w + x)
-                    }
-                }
-            }
-            
-            let onCount = grid.filter { $0 }.count
-            log.solution(theMessage: "After following the instructions, \(onCount) lights are on.")
+        func unset(i: Int) {
+            grid[i] = false
         }
+
+        func set(i: Int) {
+            grid[i] = true
+        }
+
+        func toggle(i: Int) {
+            grid[i] = !grid[i]
+        }
+
+        instructions.forEach { t in
+            let act: (Int) -> Void
+            switch (t.o) {
+            case .on:
+                act = set
+            case .off:
+                act = unset
+            case .toggle:
+                act = toggle
+            }
+
+            for x in t.xy1.x...(t.xy2.x) {
+                for y in t.xy1.y...(t.xy2.y) {
+                    act(y * w + x)
+                }
+            }
+        }
+
+        let onCount = grid.filter { $0 }.count
+        log.solution(theMessage: "After following the instructions, \(onCount) lights are on.")
     }
 
     func doPart2(withLog log: Log) {
-        _ = timed(toLog: log) {
-            var grid: [Int] = Array(repeating: 0, count: w * w)
-            instructions.forEach { t in
-                for x in t.xy1.x...(t.xy2.x) {
-                    for y in t.xy1.y...(t.xy2.y) {
-                        grid[y * w + x] = max(0, grid[y * w + x] + t.b)
-                    }
+        var grid: [Int] = Array(repeating: 0, count: w * w)
+        instructions.forEach { t in
+            for x in t.xy1.x...(t.xy2.x) {
+                for y in t.xy1.y...(t.xy2.y) {
+                    grid[y * w + x] = max(0, grid[y * w + x] + t.b)
                 }
             }
-
-            log.solution(theMessage: "Having retranslated the instructions, the cumulative brightness is \(grid.reduce(0, +)) units.")
         }
+
+        log.solution(theMessage: "Having retranslated the instructions, the cumulative brightness is \(grid.reduce(0, +)) units.")
     }
 }

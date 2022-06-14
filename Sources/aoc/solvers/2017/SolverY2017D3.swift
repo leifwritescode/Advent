@@ -8,6 +8,8 @@
 import Foundation
 
 class SolverY2017D3 : Solvable {
+    static var description = "Spiral Memory"
+
     let address: Int
 
     required init(withLog log: Log, andInput input: String) {
@@ -60,44 +62,40 @@ class SolverY2017D3 : Solvable {
     }
 
     func doPart1(withLog log: Log) {
-        _ = timed(toLog: log) {
-            let p = positionOf(number: address)
-            let d = manhattan(pos: p)
-            log.solution(theMessage: "The number of steps required is \(d).")
-        }
+        let p = positionOf(number: address)
+        let d = manhattan(pos: p)
+        log.solution(theMessage: "The number of steps required is \(d).")
     }
 
     func doPart2(withLog log: Log) {
-        _ = timed(toLog: log) {
-            var grid = [Vector2:Int]()
-            var num = 1
+        var grid = [Vector2:Int]()
+        var num = 1
 
-            grid[Vector2.zero] = 1
-            while (!grid.values.contains { e in e > address }) {
-                num += 1
-                let p = positionOf(number: num)
-                let v = Vector2(x: Float(p.0), y: Float(p.1))
+        grid[Vector2.zero] = 1
+        while (!grid.values.contains { e in e > address }) {
+            num += 1
+            let p = positionOf(number: num)
+            let v = Vector2(x: Float(p.0), y: Float(p.1))
 
-                var sumP = 0
-                for x in stride(from: v.x - 1, to: v.x + 2, by: 1) {
-                    for y in stride(from: v.y - 1, to: v.y + 2, by: 1) {
-                        if v.x == x && v.y == y {
-                            continue
-                        }
+            var sumP = 0
+            for x in stride(from: v.x - 1, to: v.x + 2, by: 1) {
+                for y in stride(from: v.y - 1, to: v.y + 2, by: 1) {
+                    if v.x == x && v.y == y {
+                        continue
+                    }
 
-                        let v2 = Vector2(x: x, y: y)
-                        if grid.keys.contains(where: { k in k == v2}) {
-                            sumP += grid[v2]!
-                        }
+                    let v2 = Vector2(x: x, y: y)
+                    if grid.keys.contains(where: { k in k == v2}) {
+                        sumP += grid[v2]!
                     }
                 }
-                
-                log.debug(theMessage: "Computing position \(v) as \(sumP)")
-                grid[v] = sumP
             }
 
-            let v = Array(grid.values).sorted(by: >).first!
-            log.solution(theMessage: "The first value written that is larger than our input is \(v).")
+            log.debug(theMessage: "Computing position \(v) as \(sumP)")
+            grid[v] = sumP
         }
+
+        let v = Array(grid.values).sorted(by: >).first!
+        log.solution(theMessage: "The first value written that is larger than our input is \(v).")
     }
 }

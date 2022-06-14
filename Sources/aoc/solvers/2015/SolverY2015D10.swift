@@ -8,6 +8,8 @@
 import Foundation
 
 class SolverY2015D10 : Solvable {
+    static var description = "Elves Look, Elves Say"
+
     private let initial: String
     private let rounds = 40
 
@@ -29,16 +31,12 @@ class SolverY2015D10 : Solvable {
     }
 
     func doPart1(withLog log: Log) {
-        _ = timed(toLog: log) {
-            let result = lookAndSay(initial: initial, rounds: 40, log: log)
-            log.solution(theMessage: "The length of the result after 40 rounds is \(result.count).")
-        }
+        let result = lookAndSay(initial: initial, rounds: 40, log: log)
+        log.solution(theMessage: "The length of the result after 40 rounds is \(result.count).")
     }
 
     func doPart2(withLog log: Log) {
-        _ = timed(toLog: log) {
-            let result = lookAndSay(initial: initial, rounds: 50, log: log)
-            log.solution(theMessage: "The length of the result after 50 rounds is \(result.count).")
-        }
+        let result = lookAndSay(initial: initial, rounds: 50, log: log)
+        log.solution(theMessage: "The length of the result after 50 rounds is \(result.count).")
     }
 }

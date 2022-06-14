@@ -46,6 +46,8 @@ fileprivate class Room {
 }
 
 class SolverY2016D4 : Solvable {
+    static var description = "Security Through Obscurity"
+
     private var rooms: [Room]
 
     required init(withLog log: Log, andInput input: String) {
@@ -58,23 +60,19 @@ class SolverY2016D4 : Solvable {
     }
 
     func doPart1(withLog log: Log) {
-        _ = timed(toLog: log) {
-            var sum = 0
-            rooms.forEach { room in
-                sum += room.sectorId
-            }
-            log.solution(theMessage: "The sum of the sectorIds of real rooms is \(sum).")
+        var sum = 0
+        rooms.forEach { room in
+            sum += room.sectorId
         }
+        log.solution(theMessage: "The sum of the sectorIds of real rooms is \(sum).")
     }
 
     func doPart2(withLog log: Log) {
-        _ = timed(toLog: log) {
-            let name = "northpole object storage"
-            if let room = rooms.first(where: { r in r.decrypt(log) == name }) {
-                log.solution(theMessage: "The north pole objects are stored in sector ID \(room.sectorId).")
-            } else {
-                log.error(theMessage: "No north pole object storage was found.")
-            }
+        let name = "northpole object storage"
+        if let room = rooms.first(where: { r in r.decrypt(log) == name }) {
+            log.solution(theMessage: "The north pole objects are stored in sector ID \(room.sectorId).")
+        } else {
+            log.error(theMessage: "No north pole object storage was found.")
         }
     }
 }

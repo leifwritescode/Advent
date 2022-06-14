@@ -8,6 +8,8 @@
 import Foundation
 
 class SolverY2015D1 : Solvable {
+    static var description = "Not Quite Lisp"
+
     let characters: [Character];
 
     required init(withLog log: Log, andInput input: String) {
@@ -15,41 +17,37 @@ class SolverY2015D1 : Solvable {
     }
 
     func doPart1(withLog log: Log) {
-        _ = timed(toLog: log) {
-            var floor = 0;
-            characters.forEach {
-                switch ($0) {
-                case "(":
-                    floor += 1
-                case ")":
-                    floor -= 1
-                default:
-                    log.debug(theMessage: "Found an unexpected character '\($0)'.")
-                }
+        var floor = 0;
+        characters.forEach {
+            switch ($0) {
+            case "(":
+                floor += 1
+            case ")":
+                floor -= 1
+            default:
+                log.debug(theMessage: "Found an unexpected character '\($0)'.")
             }
-            log.solution(theMessage: "The instructions take Santa to floor \(floor).")
         }
+        log.solution(theMessage: "The instructions take Santa to floor \(floor).")
     }
 
     func doPart2(withLog log: Log) {
-        _ = timed(toLog: log) {
-            var result = (floor: 0, ins: 0)
-            for tuple in characters.enumerated() {
-                switch (tuple.element) {
-                case "(":
-                    result.floor += 1
-                case ")":
-                    result.floor -= 1
-                default:
-                    log.debug(theMessage: "Found an unexpected character '\(tuple.element)'.")
-                }
-
-                if (result.floor == -1) {
-                    result.ins = tuple.offset + 1
-                    break
-                }
+        var result = (floor: 0, ins: 0)
+        for tuple in characters.enumerated() {
+            switch (tuple.element) {
+            case "(":
+                result.floor += 1
+            case ")":
+                result.floor -= 1
+            default:
+                log.debug(theMessage: "Found an unexpected character '\(tuple.element)'.")
             }
-            log.solution(theMessage: "The first instruction to have Santa reach floor \(result.floor) is \(result.ins).")
+
+            if (result.floor == -1) {
+                result.ins = tuple.offset + 1
+                break
+            }
         }
+        log.solution(theMessage: "The first instruction to have Santa reach floor \(result.floor) is \(result.ins).")
     }
 }

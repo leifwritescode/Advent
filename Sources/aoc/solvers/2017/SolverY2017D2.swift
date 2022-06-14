@@ -8,6 +8,8 @@
 import Foundation
 
 class SolverY2017D2 : Solvable {
+    static var description = "Corruption Checksum"
+
     let cells: [[Int]]
 
     required init(withLog log: Log, andInput input: String) {
@@ -20,35 +22,31 @@ class SolverY2017D2 : Solvable {
     }
 
     func doPart1(withLog log: Log) {
-        _ = timed(toLog: log) {
-            var checksum = 0
-            cells.forEach { array in
-                log.debug(theMessage: "\(array)")
-                let sorted = array.sorted()
-                checksum += sorted.max()! - sorted.min()!
-            }
-
-            log.solution(theMessage: "The spreadsheet checksum is \(checksum).")
+        var checksum = 0
+        cells.forEach { array in
+            log.debug(theMessage: "\(array)")
+            let sorted = array.sorted()
+            checksum += sorted.max()! - sorted.min()!
         }
+
+        log.solution(theMessage: "The spreadsheet checksum is \(checksum).")
     }
 
     func doPart2(withLog log: Log) {
-        _ = timed(toLog: log) {
-            var checksum = 0
-            cells.forEach { array in
-                let sorted = array.sorted()
-                let enumerated = sorted.enumerated()
-                short_circuit: for (i, n) in enumerated {
-                    for (j, m) in enumerated {
-                        if i != j && n % m == 0 {
-                            checksum += n / m
-                            break short_circuit
-                        }
+        var checksum = 0
+        cells.forEach { array in
+            let sorted = array.sorted()
+            let enumerated = sorted.enumerated()
+            short_circuit: for (i, n) in enumerated {
+                for (j, m) in enumerated {
+                    if i != j && n % m == 0 {
+                        checksum += n / m
+                        break short_circuit
                     }
                 }
             }
-
-            log.solution(theMessage: "The sum of each row's result is \(checksum)")
         }
+
+        log.solution(theMessage: "The sum of each row's result is \(checksum)")
     }
 }

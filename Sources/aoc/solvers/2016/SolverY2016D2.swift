@@ -8,6 +8,8 @@
 import Foundation
 
 class SolverY2016D2 : Solvable {
+    static var description = "Bathroom Security"
+
     let moves: [[Int]]
 
     required init(withLog log: Log, andInput input: String) {
@@ -47,10 +49,8 @@ class SolverY2016D2 : Solvable {
             9: [6, 9, 9, 8]
         ]
 
-        _ = timed(toLog: log) {
-            let code = calculateCode(log, kToD)
-            log.solution(theMessage: "The bathroom code is \(code).")
-        }
+        let code = calculateCode(log, kToD)
+        log.solution(theMessage: "The bathroom code is \(code).")
     }
 
     func doPart2(withLog log: Log) {
@@ -70,9 +70,7 @@ class SolverY2016D2 : Solvable {
             13: [11, 13, 13, 13]
         ]
 
-        _ = timed(toLog: log) {
-            let code = calculateCode(log, kToD)
-            log.solution(theMessage: "The bathroom code is, actually, \(code).")
-        }
+        let code = calculateCode(log, kToD)
+        log.solution(theMessage: "The bathroom code is, actually, \(code).")
     }
 }

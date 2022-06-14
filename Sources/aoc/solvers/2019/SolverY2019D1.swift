@@ -8,6 +8,8 @@
 import Foundation
 
 class SolverY2019D1 : Solvable {
+    static var description = "The Tyranny of the Rocket Equation"
+
     var masses: [Int] = Array()
     
     required init (withLog log: Log, andInput input: String) {
@@ -26,24 +28,20 @@ class SolverY2019D1 : Solvable {
     }
 
     func doPart1(withLog log: Log) -> Void {
-        _ = timed(toLog: log) {
-            var totalFuel = 0
-            masses.forEach {
-                totalFuel += simpleFuelFor(mass: $0)
-                log.debug(theMessage: "Interim mass is \(totalFuel).")
-            }
-            log.solution(theMessage: "The sum of the fuel requirements for all modules is \(totalFuel) units.")
+        var totalFuel = 0
+        masses.forEach {
+            totalFuel += simpleFuelFor(mass: $0)
+            log.debug(theMessage: "Interim mass is \(totalFuel).")
         }
+        log.solution(theMessage: "The sum of the fuel requirements for all modules is \(totalFuel) units.")
     }
 
     func doPart2(withLog log: Log) -> Void {
-        _ = timed(toLog: log) {
-            var totalFuel = 0
-            masses.forEach {
-                totalFuel += recursiveFuelFor(mass: $0)
-                log.debug(theMessage: "Interim mass is \(totalFuel).")
-            }
-            log.solution(theMessage: "The sum of the fuel requirements, accounting for fuel mass, is \(totalFuel) units.")
+        var totalFuel = 0
+        masses.forEach {
+            totalFuel += recursiveFuelFor(mass: $0)
+            log.debug(theMessage: "Interim mass is \(totalFuel).")
         }
+        log.solution(theMessage: "The sum of the fuel requirements, accounting for fuel mass, is \(totalFuel) units.")
     }
 }

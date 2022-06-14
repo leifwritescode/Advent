@@ -8,6 +8,8 @@
 import Foundation
 
 class SolverY2015D4 : Solvable {
+    static var description = "The Ideal Stocking Stuffer"
+
     private let sema: DispatchSemaphore
     private let secretKey: String
 
@@ -75,14 +77,10 @@ class SolverY2015D4 : Solvable {
     }
 
     func doPart1(withLog log: Log) {
-        _ = timed(toLog: log) {
-            doTask(withPrefix: "00000", andLog: log, searchRange: 10000)
-        }
+        doTask(withPrefix: "00000", andLog: log, searchRange: 10000)
     }
 
     func doPart2(withLog log: Log) {
-        _ = timed(toLog: log) {
-            doTask(withPrefix: "000000", andLog: log, searchRange: 10000)
-        }
+        doTask(withPrefix: "000000", andLog: log, searchRange: 10000)
     }
 }
