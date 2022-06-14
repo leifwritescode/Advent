@@ -6,6 +6,7 @@
 //
 
 import XCTest
+@testable import aoclib
 
 class TestSolverY2020D5: XCTestCase {
     let log = MockLog(enableDebug: false)

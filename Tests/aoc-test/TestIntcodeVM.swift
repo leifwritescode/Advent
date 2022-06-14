@@ -6,10 +6,10 @@
 //
 
 import XCTest
-@testable import aoc
+@testable import aoclib
 
 class TestIntcodeVM: XCTestCase {
-    let log = ConsoleLog(enableDebug: true)
+    let log = MockLog(enableDebug: false)
 
     func variantWrite(_ program: [Int], _ expected: Int) throws {
         // Arrange

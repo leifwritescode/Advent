@@ -5,7 +5,7 @@
 //  Created by Leif Walker-Grant on 19/10/2020.
 //
 
-protocol Solvable {
+public protocol Solvable {
     static var description: String { get }
 
     init (withLog log: Log, andInput input: String)

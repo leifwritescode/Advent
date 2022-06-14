@@ -5,20 +5,20 @@
 //  Created by Leif Walker-Grant on 19/10/2020.
 //
 
-enum LogCategory {
+public enum LogCategory {
     case Debug
     case Info
     case Error
     case Solution
 }
 
-protocol Log {
+public protocol Log {
     init(enableDebug: Bool)
 
     func log(theMessage message: String, inCategory category: LogCategory) -> Void;
 }
 
-extension Log{
+public extension Log{
     func debug(theMessage message: String) -> Void {
         log(theMessage: message, inCategory: .Debug)
     }
