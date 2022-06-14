@@ -8,7 +8,7 @@
 import Foundation
 
 class SolverY2020D6 : Solvable {
-    static var description = "Todo."
+    static var description = "Custom Customs"
 
     let forms: [Array<String>.SubSequence]
 
