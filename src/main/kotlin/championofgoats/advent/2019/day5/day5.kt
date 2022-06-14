@@ -55,7 +55,7 @@ object Day5 : Problem {
             224,1002,223,2,223,1005,224,674,1001,223,1,223,4,223,99,226)
         
         val iclm = ICLMachine(log, program)
-        log.Solution("DAY5p1 ans = %s <%s>".format(iclm.exec(listOf(1)).last()))
-        log.Solution("DAY5p2 ans = %s <%s>".format(iclm.exec(listOf(5)).last()))
+        log.Solution("DAY5p1 ans = %d".format(iclm.exec(listOf(1)).last()))
+        log.Solution("DAY5p2 ans = %d".format(iclm.exec(listOf(5)).last()))
     }
 }
