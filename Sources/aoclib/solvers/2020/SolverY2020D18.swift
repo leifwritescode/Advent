@@ -17,10 +17,11 @@ class SolverY2020D18 : Solvable {
     }
 
     // process brackets.
-    func factorise(_ eq: String, _ fSolve: (String) -> Int) -> String {
+    func simplify(_ eq: String, _ fSolve: (String) -> Int) -> Int {
         // if no opening brackets, nothing to process.
+        // solve and return.
         if !eq.contains("(") {
-            return eq
+            return fSolve(eq)
         }
 
         // find the last bracket, the immediately following term, and the matching close bracket.
@@ -28,12 +29,12 @@ class SolverY2020D18 : Solvable {
         let tFirst = eq.index(after: bOpen)
         let bClose = eq[bOpen...].firstIndex(of: ")")!
 
-        // replace the subrange with the factorised value.
+        // replace the subrange with the simplified value.
         var eq = eq
         eq.replaceSubrange(bOpen...bClose, with: "\(fSolve(String(eq[tFirst..<bClose])))")
 
-        // continue factorising until nothing left to do.
-        return factorise(eq, fSolve)
+        // continue simplification until nothing left to do.
+        return simplify(eq, fSolve)
     }
 
     // solve an equation (be that complete or partial.)
@@ -76,14 +77,14 @@ class SolverY2020D18 : Solvable {
 
     func doPart1(withLog log: Log) {
         let sum = equations.reduce(0) { r, eq in
-            r + solve(factorise(eq, solve))
+            r + simplify(eq, solve)
         }
         log.solution(theMessage: "The sum of the evaluated expressions is \(sum).")
     }
 
     func doPart2(withLog log: Log) {
         let sum = equations.reduce(0) { r, eq in
-            r + solve2(factorise(eq, solve2))
+            r + simplify(eq, solve2)
         }
         log.solution(theMessage: "The sum of the advanced evaluated expressions is \(sum).")
     }
