@@ -19,7 +19,7 @@ class SolverY2015D4 : Solvable {
     @Atomic private var suffix: Int = Int.max
 
     required init(withLog log: Log, andInput input: String) {
-        secretKey = input.trimmingCharacters(in: CharacterSet.newlines)
+        secretKey = input
         sema = DispatchSemaphore(value: ProcessInfo().activeProcessorCount)
     }
 
