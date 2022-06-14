@@ -8,7 +8,7 @@ import (
 
 func TestChallenge01Part01(t *testing.T) {
 	c := &Challenge01{}
-	err := c.Initialise(utils.RootDir("data/test/challenge01.in"))
+	err := c.Initialise(utils.RootDir("data/y2021/test/challenge01.in"))
 	utils.Guard(err)
 
 	e := "7"
@@ -21,7 +21,7 @@ func TestChallenge01Part01(t *testing.T) {
 
 func TestChallenge01Part02(t *testing.T) {
 	c := &Challenge01{}
-	err := c.Initialise(utils.RootDir("data/test/challenge01.in"))
+	err := c.Initialise(utils.RootDir("data/y2021/test/challenge01.in"))
 	utils.Guard(err)
 
 	e := "5"
@@ -34,7 +34,7 @@ func TestChallenge01Part02(t *testing.T) {
 
 func BenchmarkChallenge01Part01(b *testing.B) {
 	c := &Challenge01{}
-	c.Initialise(utils.RootDir("data/challenge01.in"))
+	c.Initialise(utils.RootDir("data/y2021/challenge01.in"))
 
 	for n := 0; n < b.N; n++ {
 		c.SolvePartOne()
@@ -43,7 +43,7 @@ func BenchmarkChallenge01Part01(b *testing.B) {
 
 func BenchmarkChallenge01Part02(b *testing.B) {
 	c := &Challenge01{}
-	c.Initialise(utils.RootDir("data/challenge01.in"))
+	c.Initialise(utils.RootDir("data/y2021/challenge01.in"))
 
 	for n := 0; n < b.N; n++ {
 		c.SolvePartTwo()
