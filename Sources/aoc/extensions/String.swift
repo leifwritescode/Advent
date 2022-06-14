@@ -10,6 +10,9 @@ import CryptoKit
 
 extension String {
     func groups(for regexPattern: String) throws -> [String] {
+        return try groups(for: regexPattern).reduce([], +)
+    }
+    func groups(for regexPattern: String) throws -> [[String]] {
         let regex = try NSRegularExpression(pattern: regexPattern)
         let matches = regex.matches(in: self, range: NSRange(self.startIndex..., in: self))
  
@@ -17,13 +20,14 @@ extension String {
             return []
         }
 
-        let match = matches[0]
-        return (1..<match.numberOfRanges).map {
-            let rangeBounds = match.range(at: $0)
-            guard let range = Range(rangeBounds, in: self) else {
-                return ""
+        return matches.map { match in
+            return (1..<match.numberOfRanges).map {
+                let rangeBounds = match.range(at: $0)
+                guard let range = Range(rangeBounds, in: self) else {
+                    return ""
+                }
+                return String(self[range])
             }
-            return String(self[range])
         }
     }
 
