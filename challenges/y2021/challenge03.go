@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/championofgoats/advent-of-gode/challenges"
+	"github.com/championofgoats/advent-of-gode/utilities"
 )
 
 type Challenge03 struct {
@@ -85,7 +86,7 @@ func (challenge *Challenge03) SolvePartTwo() string {
 	for i := offset; i >= 0 && len(t_oxy) > 1; i-- {
 		ones := computeOnes(t_oxy, challenge.width)
 		half := (len(t_oxy) + 1) / 2
-		commonBit := ternary(ones[(i*-1)+offset] >= half, 1, 0)
+		commonBit := utilities.Ctoi(ones[(i*-1)+offset] >= half, 1, 0)
 
 		temp := make([]int, 0)
 
@@ -102,7 +103,7 @@ func (challenge *Challenge03) SolvePartTwo() string {
 	for i := offset; i >= 0 && len(t_cbn) > 1; i-- {
 		ones := computeOnes(t_cbn, challenge.width)
 		half := (len(t_cbn) + 1) / 2
-		leastCommonBit := ternary(ones[(i*-1)+offset] >= half, 0, 1)
+		leastCommonBit := utilities.Ctoi(ones[(i*-1)+offset] >= half, 0, 1)
 		temp := make([]int, 0)
 
 		for j := 0; j < len(t_cbn); j++ {
