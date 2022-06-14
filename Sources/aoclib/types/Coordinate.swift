@@ -9,7 +9,7 @@ import Foundation
 
 typealias Point = Coordinate
 
-struct Coordinate : Hashable {
+struct Coordinate : Hashable, Comparable {
     var x: Int, y: Int
 
     static var zero = Coordinate(0, 0)
@@ -31,5 +31,9 @@ struct Coordinate : Hashable {
     static func += (_ lhs: inout Coordinate, _ rhs: Coordinate) {
         lhs.x += rhs.x
         lhs.y += rhs.y
+    }
+
+    static func < (_ lhs: Coordinate, _ rhs: Coordinate) -> Bool {
+        return (lhs.x < rhs.x) || (lhs.y < rhs.y)
     }
 }
