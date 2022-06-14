@@ -8,7 +8,7 @@
 import Foundation
 
 class SolverY2016D6 : Solvable {
-    let signals: [[String?]]
+    let signals: [[String]]
 
     required init(withLog log: Log, andInput input: String) {
         let temp = input.components(separatedBy: .newlines)

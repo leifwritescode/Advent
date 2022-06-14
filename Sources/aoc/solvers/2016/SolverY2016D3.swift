@@ -40,7 +40,7 @@ class SolverY2016D3 : Solvable {
 
             var valid = 0
             for v in stride(from: 0, to: transposed.count, by: 3) {
-                if (isValidTriangle(transposed[v]!, transposed[v+1]!, transposed[v+2]!)) {
+                if (isValidTriangle(transposed[v], transposed[v+1], transposed[v+2])) {
                     valid += 1
                 }
             }
