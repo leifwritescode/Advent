@@ -1,7 +1,5 @@
 .PHONY: all
 
-DAY=
-
 all:
 ifndef DAY
 	$(error DAY should be set to a non-zero integer between 1 and 25 inclusive (eg: make DAY=1))
