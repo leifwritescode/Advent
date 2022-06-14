@@ -1,3 +1,5 @@
+package goats.aoc.day3
+
 import java.io.File
 import java.util.*
 import kotlin.collections.*
@@ -11,7 +13,7 @@ fun abs(x: Int) : Int = if (x < 0) x * -1 else x
 // compute the rectilinear distance between two points
 fun rectilinearDistance(a: Point, b: Point) : Int = abs(b.x - a.x) + abs(b.y - a.y)
 
-// return a point description the direction of the edge
+// return a point describing the direction of the edge
 fun getOffset(instruction: String) : Point {
     // instructions take the form [URDL]\d+, e.g. U123
     return when (instruction.first()) {
