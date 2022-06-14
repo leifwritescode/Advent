@@ -101,51 +101,57 @@ func stringContains(a, b string) bool {
 	return true
 }
 
+// return the single value in values that matches predicate
+// panics if there are multiple matches
+func singleWhere(values []string, predicate func(str string) bool) string {
+	result := allWhere(values, predicate)
+	if len(result) > 1 {
+		panic("more than one value matched predicate")
+	}
+	return result[0]
+}
+
+// returns all values in values that match predicate
+func allWhere(values []string, predicate func(str string) bool) []string {
+	result := make([]string, 0)
+	for _, v := range values {
+		if predicate(v) {
+			result = append(result, v)
+		}
+	}
+	return result
+}
+
 // given an input of signal sets, return an array of signal sets indexed by the digit they represent
 func deduceEntry(input []string) []string {
 	// prepare the output
 	output := make([]string, 10)
 
-	// prep a query structure
-	query_all := linq.From(input)
-
 	// we already know 1, 4, 7 and 8 are length 2, 4, 3 and 7 respectively
-	output[1] = query_all.SingleWithT(func(s string) bool { return len(s) == 2 }).(string)
-	output[4] = query_all.SingleWithT(func(s string) bool { return len(s) == 4 }).(string)
-	output[7] = query_all.SingleWithT(func(s string) bool { return len(s) == 3 }).(string)
-	output[8] = query_all.SingleWithT(func(s string) bool { return len(s) == 7 }).(string)
+	output[1] = singleWhere(input, func(s string) bool { return len(s) == 2 })
+	output[4] = singleWhere(input, func(s string) bool { return len(s) == 4 })
+	output[7] = singleWhere(input, func(s string) bool { return len(s) == 3 })
+	output[8] = singleWhere(input, func(s string) bool { return len(s) == 7 })
 
 	// we know that 0, 6 and 9 are all length 6
 	// and that 9 includes 7, 1, 4 and 5
 	// and that 0 is not 9, but includes 7 and 1
 	// and that six includes neither 7, 1 nor 4
 	// therefore 9 includes 4, 0 is not 9 and includes 1, and 6 is neither 9 nor 0.
-	query_length_six := query_all.WhereT(func(s string) bool { return len(s) == 6 })
-	output[9] = query_length_six.SingleWithT(func(s string) bool {
-		return stringContains(s, output[4])
-	}).(string)
-	output[0] = query_length_six.SingleWithT(func(s string) bool {
-		return s != output[9] && stringContains(s, output[1])
-	}).(string)
-	output[6] = query_length_six.SingleWithT(func(s string) bool {
-		return s != output[9] && s != output[0]
-	}).(string)
+	length_six := allWhere(input, func(s string) bool { return len(s) == 6 })
+	output[9] = singleWhere(length_six, func(s string) bool { return stringContains(s, output[4]) })
+	output[0] = singleWhere(length_six, func(s string) bool { return s != output[9] && stringContains(s, output[1]) })
+	output[6] = singleWhere(length_six, func(s string) bool { return s != output[9] && s != output[0] })
 
 	// we know that 2, 3 and 5 are all length 5
 	// and that 3 includes 7 and 1
 	// and that 5 is contained by 9, but includes neither 7 nor 1
 	// and that 2 includes no other number
 	// therefore 3 includes 7 and 1, 5 is included by 9 but does not contain 1, and 2 is neither 3 nor 5.
-	query_length_five := query_all.WhereT(func(s string) bool { return len(s) == 5 })
-	output[3] = query_length_five.SingleWithT(func(s string) bool {
-		return stringContains(s, output[7]) && stringContains(s, output[1])
-	}).(string)
-	output[5] = query_length_five.SingleWithT(func(s string) bool {
-		return stringContains(output[9], s) && !stringContains(s, output[1])
-	}).(string)
-	output[2] = query_length_five.SingleWithT(func(s string) bool {
-		return s != output[3] && s != output[5]
-	}).(string)
+	length_five := allWhere(input, func(s string) bool { return len(s) == 5 })
+	output[3] = singleWhere(length_five, func(s string) bool { return stringContains(s, output[7]) && stringContains(s, output[1]) })
+	output[5] = singleWhere(length_five, func(s string) bool { return stringContains(output[9], s) && !stringContains(s, output[1]) })
+	output[2] = singleWhere(length_five, func(s string) bool { return s != output[3] && s != output[5] })
 
 	return output
 }
