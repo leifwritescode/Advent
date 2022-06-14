@@ -3,12 +3,34 @@ package challenges
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
+	"sort"
 	"strings"
 
 	"github.com/championofgoats/advent-of-gode/challenges"
 	common_math "github.com/championofgoats/advent-of-gode/common/math"
 	utils "github.com/championofgoats/advent-of-gode/utilities"
 )
+
+type sortableIntArray []int
+
+func (s sortableIntArray) Less(i, j int) bool {
+	return s[i] > s[j]
+}
+
+func (s sortableIntArray) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
+
+func (s sortableIntArray) Len() int {
+	return len(s)
+}
+
+func sortIntsDescending(s []int) []int {
+	r := s
+	sort.Sort(sortableIntArray(r))
+	return r
+}
 
 type Challenge09 struct {
 	challenges.BaseChallenge
@@ -62,7 +84,7 @@ func (c *Challenge09) validAdjacents(x, y int) []common_math.Point {
 }
 
 // for a given x,y coord, gives the path to the basin
-func (c *Challenge09) bfsForBasins(x, y int) {
+func (c *Challenge09) dfsMapBasins(x, y int) {
 	// the cell we're presently standing in
 	this_cell := common_math.Point{X: x, Y: y}
 
@@ -78,7 +100,6 @@ func (c *Challenge09) bfsForBasins(x, y int) {
 
 	// all possible neighbours
 	neighbours := c.validAdjacents(x, y)
-	//log.Println("neighbours of (", x, ",", y, ") are", neighbours)
 
 	// iterate over the neighbours
 	for i := 0; i < len(neighbours); i++ {
@@ -95,7 +116,7 @@ func (c *Challenge09) bfsForBasins(x, y int) {
 
 	// and continue traversal if we've not found the end
 	if this_cell != lowest_neighbour {
-		c.bfsForBasins(lowest_neighbour.X, lowest_neighbour.Y)
+		c.dfsMapBasins(lowest_neighbour.X, lowest_neighbour.Y)
 	}
 }
 
@@ -114,12 +135,11 @@ func (c *Challenge09) SolvePartOne() string {
 	// i could totally do this with go routines lmfao
 	for y := 0; y < c.height; y++ {
 		for x := 0; x < c.width; x++ {
-			c.bfsForBasins(x, y)
+			c.dfsMapBasins(x, y)
 		}
 	}
 
 	// count the basins and compute total risk
-	// first answer was 1815 and that was too high
 	basins := c.allWhere(c.lava_tube_map, func(p1, p2 common_math.Point) bool { return p1 == p2 })
 	total_risk := 0
 	for i := 0; i < len(basins); i++ {
@@ -129,6 +149,76 @@ func (c *Challenge09) SolvePartOne() string {
 	return fmt.Sprintf("%d", total_risk)
 }
 
+// given the location of a basin, find total length of all
+// called recursively
+func (c *Challenge09) bfsTracePath(p common_math.Point) []common_math.Point {
+	// for a given point, p,  we need to find all points that lead to this point (except ourselves if we're a basin)
+	// given a map [a] => b where b is the destination and a is the origin
+	// if a == p then b is a basin
+	// if [a] == p then a is its ancestor
+	// if height at a == 9 then it's not actually part of the basin
+
+	result := []common_math.Point{p}
+
+	for a, b := range c.lava_tube_map {
+		height := c.input[a.Y*c.width+a.X]
+		if b == p && a != p && height != 9 {
+			result = append(result, c.bfsTracePath(a)...)
+		}
+	}
+
+	return result
+}
+
+func (c *Challenge09) pathContains(p common_math.Point, path []common_math.Point) bool {
+	for _, v := range path {
+		if v == p {
+			return true
+		}
+	}
+	return false
+}
+
+func (c *Challenge09) visualiseBasin(path []common_math.Point) {
+	log.Println("### BEGIN VIS ###")
+	for y := 0; y < c.height; y++ {
+		str := ""
+		for x := 0; x < c.width; x++ {
+			p := common_math.Point{X: x, Y: y}
+			if c.pathContains(p, path) {
+				height := c.input[p.Y*c.width+p.X]
+				str = fmt.Sprintf("%s%d", str, height)
+			} else {
+				str = fmt.Sprintf("%s%s", str, ".")
+			}
+		}
+		log.Println(str)
+	}
+	log.Println("#### END VIS ####")
+}
+
 func (c *Challenge09) SolvePartTwo() string {
-	return "not implemented"
+	// if in test, create the map first
+	if len(c.lava_tube_map) == 0 {
+		c.SolvePartOne()
+	}
+
+	basin_sizes := make([]int, 0)
+	for k, v := range c.lava_tube_map {
+		// basins lead to themselves
+		if k == v {
+			path := c.bfsTracePath(k)
+
+			// uncomment me to visualise the basin
+			// c.visualiseBasin(path)
+
+			// append the length of that set
+			basin_sizes = append(basin_sizes, len(path))
+		}
+	}
+
+	// 2046720 was too high
+	basin_sizes = sortIntsDescending(basin_sizes)
+	result := basin_sizes[0] * basin_sizes[1] * basin_sizes[2]
+	return fmt.Sprintf("%d", result)
 }
