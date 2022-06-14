@@ -9,14 +9,12 @@ import Foundation
 import CryptoKit
 
 extension String {
-    func groups(for regexPattern: String) throws -> [String] {
-        return try groups(for: regexPattern).reduce([], +)
-    }
+    func groups(for regexPattern: String) -> [[String]] {
+        guard let regex = try? NSRegularExpression(pattern: regexPattern) else {
+            return []
+        }
 
-    func groups(for regexPattern: String) throws -> [[String]] {
-        let regex = try NSRegularExpression(pattern: regexPattern)
         let matches = regex.matches(in: self, range: NSRange(self.startIndex..., in: self))
- 
         if (matches.isEmpty) {
             return []
         }
