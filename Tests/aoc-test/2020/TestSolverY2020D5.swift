@@ -9,45 +9,31 @@ import XCTest
 @testable import aoclib
 
 class TestSolverY2020D5: XCTestCase {
-    let log = MockLog(enableDebug: false)
-
-    func testPart1Example1() throws {
-        XCTAssertNoThrow() {
-            let solver = SolverY2020D5(withLog: self.log, andInput: "BFFFBBFRRR")
-
-            self.log.clear()
-            solver.doPart1(withLog: self.log)
-            XCTAssertTrue(self.log.checkSolution("567"))
-        }
+    func test_ka__e1_p1() throws {
+        aoc_test.run(SolverY2020D5.self,
+                     using: "BFFFBBFRRR",
+                     expecting: "567")
     }
 
-    func testPart1Example2() throws {
-        XCTAssertNoThrow() {
-            let solver = SolverY2020D5(withLog: self.log, andInput: "FFFBBBFRRR")
-
-            self.log.clear()
-            solver.doPart1(withLog: self.log)
-            XCTAssertTrue(self.log.checkSolution("119"))
-        }
+    func test_ka__e2_p1() throws {
+        aoc_test.run(SolverY2020D5.self,
+                     using: "FFFBBBFRRR",
+                     expecting: "119")
     }
 
-    func testPart1Example3() throws {
-        XCTAssertNoThrow() {
-            let solver = SolverY2020D5(withLog: self.log, andInput: "BBFFBBFRLL")
-
-            self.log.clear()
-            solver.doPart1(withLog: self.log)
-            XCTAssertTrue(self.log.checkSolution("820"))
-        }
+    func test_ka__e3_p1() throws {
+        aoc_test.run(SolverY2020D5.self,
+                     using: "BBFFBBFRLL",
+                     expecting: "820")
     }
 
-    func testPart2Example1() throws {
-        XCTAssertNoThrow() {
-            let solver = SolverY2020D5(withLog: self.log, andInput: "BBFFBBFRLL\nBBFFBBFRRL")
-
-            self.log.clear()
-            solver.doPart2(withLog: self.log)
-            XCTAssertTrue(self.log.checkSolution("821"))
-        }
+    func test_ka__e4_p1p2() throws {
+        aoc_test.run(SolverY2020D5.self,
+                     using: """
+                        BBFFBBFRLL
+                        BBFFBBFRRL
+                        """,
+                     expecting: "822",
+                     and: "821")
     }
 }
