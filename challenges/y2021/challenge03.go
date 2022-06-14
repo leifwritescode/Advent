@@ -68,15 +68,6 @@ func (challenge *Challenge03) SolvePartOne() string {
 	return fmt.Sprintf("%d", gamma*epsilon)
 }
 
-// clumsy repical of ?: operator
-func ternary(c bool, t int, f int) int {
-	var r = f
-	if c {
-		r = t
-	}
-	return r
-}
-
 func (challenge *Challenge03) SolvePartTwo() string {
 	offset := challenge.width - 1
 	t_oxy := challenge.input
