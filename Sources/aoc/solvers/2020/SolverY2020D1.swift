@@ -8,7 +8,7 @@
 import Foundation
 
 class SolverY2020D1 : Solvable {
-    static var description = "Todo."
+    static var description = "Report Repair"
 
     let target = 2020
     let expenses: [Int]
