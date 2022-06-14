@@ -34,3 +34,23 @@ func Min(a, b int64) int64 {
 func GauseSum(v int) int {
 	return (v * (v + 1)) / 2
 }
+
+func Min32(a, b int) int {
+	r := a
+	if a > b {
+		r = b
+	}
+	return r
+}
+
+func max(a, b int) int {
+	r := a
+	if a < b {
+		r = b
+	}
+	return r
+}
+
+func Clamp(v, l, h int) int {
+	return Min32(h, max(v, l))
+}

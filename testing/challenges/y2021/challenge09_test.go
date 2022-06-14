@@ -12,7 +12,7 @@ func TestChallenge09nPart01(t *testing.T) {
 }
 
 func TestChallenge09Part02(t *testing.T) {
-	test.ExecuteSolutionPartTwoTest(t, &challenges.Challenge09{}, "data/y2021/test/challenge09.in", "not implemented")
+	test.ExecuteSolutionPartTwoTest(t, &challenges.Challenge09{}, "data/y2021/test/challenge09.in", "1134")
 }
 
 func BenchmarkChallenge09Part01(b *testing.B) {
