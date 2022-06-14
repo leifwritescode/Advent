@@ -104,8 +104,8 @@ object Day7 : Problem {
         // We also need them to wait on each output.
         // Let's change modes, and reset them
         iclm.forEach {
-            it.stateful = true
-            it.pauseOnOutput = true
+            it.supportState = true
+            it.supportPauseResume = true
             it.reset()
         }
         
