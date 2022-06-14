@@ -3,17 +3,34 @@ Solutions in Kotlin
 
 ## Usage
 ```
-make 
+gradle run -q
 ```
-Will build the solutions for 2019.
+Will build the project and run the default scenario, which is currently day 1 of 2019.
+
+This is configurable at the command line by specifying arguments in `--args` as below.
 ```
-make run D=<0..25>
+usage: [-h] [-y YEAR] [-d DAY] [-i INPUTDIR] [-o OUTPUTDIR]
+
+optional arguments:
+  -h, --help              show this help message and exit
+
+  -y YEAR, --year YEAR    the year from which to run solutions
+
+  -d DAY, --day DAY       the solution to run
+
+  -i INPUTDIR,            the directory from which to source inputs
+  --inputDir INPUTDIR
+
+  -o OUTPUTDIR,           the directory in which to store outputs
+  --outputDir OUTPUTDIR
 ```
-Where `D` is any non-zero integer up to 25, will run the solution for DD/12/2019.
+For example, consider the following statement
 ```
-make clean
+gradle run -q --args='-y 2019 -d 8 -o /tmp'
 ```
-Will remove all build artefacts
+This will execute solution 8, from 2019, and direct any file-based outputs to `/temp`.
 
 ## Acknowledgements
-[Laurence Gonsalves](https://github.com/xenomachina), for their execellent [Kotlin arguments parsing library](https://github.com/xenomachina/kotlin-argparser).
+Thanks to Laurence Gonsalves, authour of the [kotlin-argparser](https://github.com/xenomachina/kotlin-argparser) library.
+
+Thanks to ronmamo, authour of the [reflections](https://github.com/ronmamo/reflections) library.
