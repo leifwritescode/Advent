@@ -2,38 +2,24 @@ package championofgoats.advent.twentynineteen.day3
 
 import java.io.File
 import java.util.*
-import kotlin.collections.*
 import championofgoats.advent.Problem
 import championofgoats.advent.utils.logging.Logger
-import championofgoats.advent.utils.logging.ConsoleLogger
 
 object Day3 : Problem {
     override fun solve(inputDir: String, outputDir: String, log: Logger)  {
         // a point in 2D space
         data class Point(val x: Int, val y: Int)
-        
-        // get the absolute (e.g. non-zero) value of an integer
-        fun abs(x: Int) : Int = if (x < 0) x * -1 else x
-        
-        // compute the rectilinear distance between two points
-        fun rectilinearDistance(a: Point, b: Point) : Int = abs(b.x - a.x) + abs(b.y - a.y)
-        
-        // return a point describing the direction of the edge
-        fun getOffset(instruction: String) : Point {
-            // instructions take the form [URDL]\d+, e.g. U123
-            return when (instruction.first()) {
+
+        // given a two points describing an edge, append to l all points that are touched by the edge
+        // return l
+        fun appendEdge(l: MutableList<Point>, origin: Point, instruction: String) : MutableList<Point> {
+            var offset = when (instruction.first()) {
                 'U' -> Point(0, 1)
                 'R' -> Point(1, 0)
                 'D' -> Point(0, -1)
                 'L' -> Point(-1, 0)
                 else -> Point(0, 0)
             }
-        }
-        
-        // given a two points describing an edge, append to l all points that are touched by the edge
-        // return l
-        fun appendEdge(l: MutableList<Point>, origin: Point, instruction: String) : MutableList<Point> {
-            var offset = getOffset(instruction)
             var totalPoints = instruction.drop(1).toInt() // the number of steps
             for (i in 1..totalPoints) {
                 var p = Point(origin.x + (offset.x * i), origin.y + (offset.y * i))
@@ -93,16 +79,9 @@ object Day3 : Problem {
         var output = hashMap.filterValues { it == wires.size }
         
         // reduce keys to list, sorting ascending by rectilinear distance
-        var distances = output.map{ (k,_) -> rectilinearDistance(Point(0, 0), k) }.toMutableList()
-        distances.sort()
-        
+        log.Solution("DAY3p1 ans = %s".format(output.map{ (k,_) -> k.x + k.y }.sorted().first()))      
         // filter out any points from steps that don't appear in the output candidates
         // map down to values and sort ascending
-        var steps = stepMap.filterKeys{ output.containsKey(it) }.map{ (_,v) -> v }.toMutableList()
-        steps.sort()
-        
-        // first points are closest intersect to origin + closest intersect on wires by distance
-        log.Solution("DAY3p1 ans = %s".format(distances.get(0))) 
-        log.Solution("DAY3p2 ans = %s".format(steps.get(0)))
+        log.Solution("DAY3p2 ans = %s".format(stepMap.filterKeys{ output.containsKey(it) }.map{ (_,v) -> v }.sorted().first()))
     }
 }
