@@ -29,6 +29,6 @@ fun main(args: Array<String>) {
         fuelNeededPartB += getFuelRecursive(it.toInt())
     }
 
-    println(fuelNeededPartA)
-    println(fuelNeededPartB)
+    println("DAY1p1 ans = %d".format(fuelNeededPartA))
+    println("DAY1p2 ans = %d".format(fuelNeededPartB))
 }
