@@ -4,6 +4,14 @@ import (
 	"github.com/ahmetb/go-linq/v3"
 )
 
+func Abs(n int) int {
+	r := n
+	if r < 0 {
+		r *= -1
+	}
+	return r
+}
+
 func Median(values []int) int {
 	nums := len(values)
 	half := nums / 2
@@ -43,7 +51,15 @@ func Min32(a, b int) int {
 	return r
 }
 
-func Max(a, b int) int {
+func Max32(a, b int) int {
+	r := a
+	if a < b {
+		r = b
+	}
+	return r
+}
+
+func Max(a, b int64) int64 {
 	r := a
 	if a < b {
 		r = b
@@ -52,5 +68,5 @@ func Max(a, b int) int {
 }
 
 func Clamp(v, l, h int) int {
-	return Min32(h, Max(v, l))
+	return Min32(h, Max32(v, l))
 }
