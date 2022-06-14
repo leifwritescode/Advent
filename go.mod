@@ -7,4 +7,4 @@ require (
 	github.com/pborman/getopt/v2 v2.1.0
 )
 
-require github.com/ahmetb/go-linq/v3 v3.2.0 // indirect
+require github.com/ahmetb/go-linq/v3 v3.2.0
