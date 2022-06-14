@@ -12,6 +12,7 @@ extension String {
     func groups(for regexPattern: String) throws -> [String] {
         return try groups(for: regexPattern).reduce([], +)
     }
+
     func groups(for regexPattern: String) throws -> [[String]] {
         let regex = try NSRegularExpression(pattern: regexPattern)
         let matches = regex.matches(in: self, range: NSRange(self.startIndex..., in: self))
@@ -44,5 +45,25 @@ extension String {
                 .joined()
         }
         return result
+    }
+
+    func splitOnNewCharacter() -> [String] {
+        guard !isEmpty else {
+            return []
+        }
+
+        var result: [String] = Array()
+        var scratch: String = "\(first!)"
+        for next in dropFirst() {
+            if next != scratch.last {
+                result.append(scratch)
+                scratch = "\(next)"
+            } else {
+                scratch += String(next)
+            }
+        }
+        result.append(scratch)
+
+        return result;
     }
 }
