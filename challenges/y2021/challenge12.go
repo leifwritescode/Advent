@@ -54,39 +54,7 @@ func (c *Challenge12) arrayContains(arr []string, val string) bool {
 	return false
 }
 
-func (c *Challenge12) dfsFindValidPathCount(path []string, next_node string) int {
-	// we found a valid win condition
-	if next_node == "start" {
-		return 1
-	}
-
-	// if next_node is a small cave, and we've already visited it, return 0
-	isSmallCave := c.isLower(next_node)
-	if isSmallCave && c.arrayContains(path, next_node) {
-		return 0
-	}
-
-	// otherwise, lets pull its list of adjacents to iterate
-	adjacents := c.input[next_node]
-
-	// if we've just been called, need to make something to append to
-	if path == nil {
-		path = make([]string, 0)
-	}
-
-	// and add 1 for any valid path found from this node
-	sum := 0
-	for _, adjacent := range adjacents {
-		if adjacent != "end" {
-			sum += c.dfsFindValidPathCount(append(path, next_node), adjacent)
-		}
-	}
-
-	// return the sum of paths found from this node
-	return sum
-}
-
-func (c *Challenge12) dfsFindValidPathCountV2(path []string, next_node string, small_cave_flag bool) int {
+func (c *Challenge12) dfsFindValidPathCountV2(path []string, next_node string, small_cave_flag bool, small_cave_master_flag bool) int {
 	// we found a valid win condition
 	if next_node == "start" {
 		return 1
@@ -99,7 +67,7 @@ func (c *Challenge12) dfsFindValidPathCountV2(path []string, next_node string, s
 	isSmallCave := c.isLower(next_node)
 	alreadyVisited := c.arrayContains(path, next_node)
 	if isSmallCave && alreadyVisited {
-		if small_cave_flag {
+		if small_cave_flag || !small_cave_master_flag {
 			// we've visited this node twice before
 			return 0
 		} else {
@@ -120,7 +88,7 @@ func (c *Challenge12) dfsFindValidPathCountV2(path []string, next_node string, s
 	sum := 0
 	for _, adjacent := range adjacents {
 		if adjacent != "end" {
-			sum += c.dfsFindValidPathCountV2(append(path, next_node), adjacent, small_cave_flag)
+			sum += c.dfsFindValidPathCountV2(append(path, next_node), adjacent, small_cave_flag, small_cave_master_flag)
 		}
 	}
 
@@ -129,11 +97,11 @@ func (c *Challenge12) dfsFindValidPathCountV2(path []string, next_node string, s
 }
 
 func (c *Challenge12) SolvePartOne() string {
-	result := c.dfsFindValidPathCount(nil, "end")
+	result := c.dfsFindValidPathCountV2(nil, "end", false, false)
 	return fmt.Sprintf("%d", result)
 }
 
 func (c *Challenge12) SolvePartTwo() string {
-	result := c.dfsFindValidPathCountV2(nil, "end", false)
+	result := c.dfsFindValidPathCountV2(nil, "end", false, true)
 	return fmt.Sprintf("%d", result)
 }
