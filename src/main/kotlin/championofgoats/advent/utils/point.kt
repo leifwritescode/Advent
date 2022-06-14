@@ -2,6 +2,8 @@ package championofgoats.advent.utils
 
 import kotlin.math.abs
 import kotlin.math.sign
+import championofgoats.advent.utils.gcd
+import championofgoats.advent.utils.Direction
 
 // A coordinate-space agnostic point in 2D space
 data class Point(var x: Int, var y: Int)
