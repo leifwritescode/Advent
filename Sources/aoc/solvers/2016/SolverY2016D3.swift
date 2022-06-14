@@ -28,6 +28,7 @@ class SolverY2016D3 : Solvable {
                     valid += 1
                 }
             }
+
             log.solution(theMessage: "Exactly \(valid) triangles are valid.")
         }
     }
@@ -35,15 +36,12 @@ class SolverY2016D3 : Solvable {
     func doPart2(withLog log: Log) {
         _ = timed(toLog: log) {
             let w = 3
-            let h = sides.count / w
+            let transposed = transpose1d(array: sides, width: w, height: sides.count / w)
+
             var valid = 0
-            for c in stride(from: 0, through: w - 1, by: 1) {
-                for r in stride(from: 0, through: h - 1, by: 3) {
-                    if (isValidTriangle(sides[r * w + c],
-                                        sides[(r + 1) * w + c],
-                                        sides[(r + 2) * w + c])) {
-                        valid += 1
-                    }
+            for v in stride(from: 0, to: transposed.count, by: 3) {
+                if (isValidTriangle(transposed[v]!, transposed[v+1]!, transposed[v+2]!)) {
+                    valid += 1
                 }
             }
 
