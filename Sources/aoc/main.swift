@@ -119,7 +119,7 @@ extension Aoc {
             input = input.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             let solver = cls.init(withLog: log, andInput: input)
 
-            print("Day \(day): \(cls.description).\n")
+            print("Event Year \(year); Day \(day): \(cls.description).\n")
 
             if (behaviour == .first || behaviour == .both) {
                 _ = timed(toLog: log) {
