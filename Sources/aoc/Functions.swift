@@ -87,4 +87,8 @@ class Functions {
     static func sToA(_ str: String) -> [Int] {
         return str.compactMap { c in Int(c.asciiValue!) }
     }
+
+    static func clamp(_ value: Int, _ low: Int, _ high: Int) -> Int {
+        return max(low, min(high, value))
+    }
 }

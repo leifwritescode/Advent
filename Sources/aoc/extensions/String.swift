@@ -64,4 +64,8 @@ extension String {
 
         return result;
     }
+
+    subscript (_ offset: Int) -> String {
+        return String(self[index(startIndex, offsetBy: offset)])
+    }
 }
