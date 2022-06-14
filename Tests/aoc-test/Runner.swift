@@ -8,7 +8,10 @@
 import XCTest
 @testable import aoclib
 
-func run(_ solver: Solvable.Type, using input: String, expecting theFirstSolution: String? = nil, and theSecondSolution: String? = nil) {
+func run(_ solver: Solvable.Type,
+         using input: String,
+         expecting theFirstSolution: String? = nil,
+         and theSecondSolution: String? = nil) {
     let mockLog = MockLog(enableDebug: false)
 
     if theFirstSolution != nil {
@@ -24,4 +27,20 @@ func run(_ solver: Solvable.Type, using input: String, expecting theFirstSolutio
         secondSolver.doPart2(withLog: mockLog)
         XCTAssertTrue(mockLog.checkSolution(theSecondSolution!), mockLog.message)
     }
+}
+
+func runDependent(_ solver: Solvable.Type,
+                  using input: String,
+                  expecting theFirstSolution: String,
+                  and theSecondSolution: String) {
+    let mockLog = MockLog(enableDebug: false)
+
+    mockLog.clear()
+    let theSolver = solver.init(withLog: mockLog, andInput: input)
+    theSolver.doPart1(withLog: mockLog)
+    XCTAssertTrue(mockLog.checkSolution(theFirstSolution), mockLog.message)
+
+    mockLog.clear()
+    theSolver.doPart2(withLog: mockLog)
+    XCTAssertTrue(mockLog.checkSolution(theSecondSolution), mockLog.message)
 }
