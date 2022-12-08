@@ -61,10 +61,10 @@ public class Grid<Tvalue>
     /// Get all cells immediately due west of the given cell.
     /// </summary>
     /// <param name="cell">The reference cell.</param>
-    /// <returns>All cells satisfying aX == refY && aX < refX.</returns>
+    /// <returns>All cells satisfying aX == refY && aX < refX, ordered closest-to-furthest.</returns>
     public IEnumerable<Cell<Tvalue>> Aleft(Cell<Tvalue> cell)
     {
-        var result = cells.Where(x => x.Y == cell.Y && x.X < cell.X);
+        var result = cells.Where(x => x.Y == cell.Y && x.X < cell.X).OrderByDescending(x => x.X);
         return result;
     }
 
@@ -72,10 +72,10 @@ public class Grid<Tvalue>
     /// Get all cells immediately due east of the given cell.
     /// </summary>
     /// <param name="cell">The reference cell.</param>
-    /// <returns>All cells satisfying aY == refY && aX > refX.</returns>
+    /// <returns>All cells satisfying aY == refY && aX > refX, ordered closest-to-furthest.</returns>
     public IEnumerable<Cell<Tvalue>> Aright(Cell<Tvalue> cell)
     {
-        var result = cells.Where(x => x.Y == cell.Y && x.X > cell.X);
+        var result = cells.Where(x => x.Y == cell.Y && x.X > cell.X).OrderBy(x => x.X);
         return result;
     }
 
@@ -83,10 +83,10 @@ public class Grid<Tvalue>
     /// Get all cells immediately due north of the given cell.
     /// </summary>
     /// <param name="cell">The reference cell.</param>
-    /// <returns>All cells satisfying aX == refX && aY < refY.</returns>
+    /// <returns>All cells satisfying aX == refX && aY < refY, ordered closest-to-furthest.</returns>
     public IEnumerable<Cell<Tvalue>> Above(Cell<Tvalue> cell)
     {
-        var result = cells.Where(x => x.X == cell.X && x.Y < cell.Y);
+        var result = cells.Where(x => x.X == cell.X && x.Y < cell.Y).OrderByDescending(x => x.Y);
         return result;
     }
 
@@ -94,10 +94,10 @@ public class Grid<Tvalue>
     /// Get all cells immediately due south of the given cell.
     /// </summary>
     /// <param name="cell">The reference cell.</param>
-    /// <returns>All cells satisfying aX == refX && aY > refY.</returns>
+    /// <returns>All cells satisfying aX == refX && aY > refY, ordered closest-to-furthest.</returns>
     public IEnumerable<Cell<Tvalue>> Below(Cell<Tvalue> cell)
     {
-        var result = cells.Where(x => x.X == cell.X && x.Y > cell.Y);
+        var result = cells.Where(x => x.X == cell.X && x.Y > cell.Y).OrderBy(x => x.Y);
         return result;
     }
 }

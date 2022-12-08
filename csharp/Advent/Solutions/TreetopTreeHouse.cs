@@ -1,8 +1,7 @@
 ﻿using Advent.Contracts;
 using Advent.Ornaments;
 using Microsoft.Extensions.Logging;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Concurrent;
 
 namespace Advent.Solutions;
 
@@ -17,15 +16,14 @@ internal class TreetopTreeHouse : SolutionBase
     {
         var grid = new Grid<int>(context.Input.PreProcessLines());
 
-        var start = grid.Width + 1;                                // (1,1), assuming top left origin
-        var end = (grid.Height - 1) * grid.Width + grid.Width - 1; // (1,1), assuming bottom right origin
-
         // we start with all outer trees visible
         var count = (grid.Width * 2) + (grid.Height * 2) - 4;
-        Parallel.For(start, end, coord =>
+        Parallel.For(0, grid.Width * grid.Height, coord =>
         {
             var x = coord % grid.Width;
             var y = coord / grid.Height;
+            if (x == 0 || y == 0 || x == grid.Width - 1 || y == grid.Height - 1)
+                return;
 
             var cell = grid.Cell(x, y);
 
@@ -47,6 +45,28 @@ internal class TreetopTreeHouse : SolutionBase
 
     protected override async Task<string> SolvePartTwoAsync(IContext context)
     {
-        return "";
+        var grid = new Grid<int>(context.Input.PreProcessLines());
+
+        var scenicScores = new ConcurrentBag<int>();
+        Parallel.For(0, grid.Width * grid.Height, coord =>
+        {
+            var x = coord % grid.Width;
+            var y = coord / grid.Height;
+
+            var cell = grid.Cell(x, y);
+
+            // tree is visible iif all trees in a given direction are shorter than it
+            var scenicScore = new[]
+            {
+                grid.Above(cell)?.TakeWhile(x => x.Value < cell.Value,  inclusive: true).Count() ?? 0,
+                grid.Aleft(cell)?.TakeWhile(x => x.Value < cell.Value,  inclusive: true).Count() ?? 0,
+                grid.Below(cell)?.TakeWhile(x => x.Value < cell.Value,  inclusive: true).Count() ?? 0,
+                grid.Aright(cell)?.TakeWhile(x => x.Value < cell.Value, inclusive: true).Count() ?? 0,
+            }.Aggregate(1, (a, v) => a * v);
+
+            scenicScores.Add(scenicScore);
+        });
+
+        return await Task.FromResult($"{scenicScores.Max()}");
     }
 }
