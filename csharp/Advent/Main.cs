@@ -56,7 +56,8 @@ rootCommand.SetHandler(async adventOptions =>
         .AddTransient<ISolution, CampCleanup>()
         .AddTransient<ISolution, SupplyStacks>()
         .AddTransient<ISolution, TuningTrouble>()
-        .AddTransient<ISolution, NoSpaceLeftOnDevice>();
+        .AddTransient<ISolution, NoSpaceLeftOnDevice>()
+        .AddTransient<ISolution, TreetopTreeHouse>();
 
     var app = services
         .BuildServiceProvider()
