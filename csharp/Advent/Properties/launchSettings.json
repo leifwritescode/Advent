@@ -2,7 +2,7 @@
   "profiles": {
     "Advent": {
       "commandName": "Project",
-      "commandLineArgs": "--year 2022 --day 7"
+      "commandLineArgs": "--year 2022 --day 8"
     }
   }
 }
