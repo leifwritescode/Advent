@@ -2,6 +2,7 @@
 using Advent.Ornaments;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Advent.Solutions;
 
@@ -16,31 +17,30 @@ internal class TreetopTreeHouse : SolutionBase
     {
         var grid = new Grid<int>(context.Input.PreProcessLines());
 
-        // consider all trees simultaneously
-        var limx = grid.Width - 1;
-        var limy = grid.Height - 1;
+        var start = grid.Width + 1;                                // (1,1), assuming top left origin
+        var end = (grid.Height - 1) * grid.Width + grid.Width - 1; // (1,1), assuming bottom right origin
 
         // we start with all outer trees visible
         var count = (grid.Width * 2) + (grid.Height * 2) - 4;
-
-        for (var y = 1; y < limy; y++)
+        Parallel.For(start, end, coord =>
         {
-            for (var x = 1; x < limx; x++)
-            {
-                var cell = grid.Cell(x, y);
+            var x = coord % grid.Width;
+            var y = coord / grid.Height;
 
-                // tree is visible iif all trees in a given direction are shorter than it
-                var isVisible = new[]
-                {
+            var cell = grid.Cell(x, y);
+
+            // tree is visible iif all trees in a given direction are shorter than it
+            var isVisible = new[]
+            {
                     grid.Above(cell).All(x => x.Value < cell.Value),
                     grid.Aright(cell).All(x => x.Value < cell.Value),
                     grid.Below(cell).All(x => x.Value < cell.Value),
                     grid.Aleft(cell).All(x => x.Value < cell.Value),
                 }.Any(x => x);
 
-                count += isVisible ? 1 : 0;
-            }
-        }
+            if (isVisible)
+                Interlocked.Increment(ref count);
+        });
 
         return await Task.FromResult($"{count}");
     }
