@@ -36,7 +36,6 @@ rootCommand.SetHandler(async adventOptions =>
     configuration.GetSection(TokenSettings.Section).Bind(tokens);
     ArgumentException.ThrowIfNullOrEmpty(tokens.Github);
 
-
     // Add new dependencies here
     services
          .AddLogging(logging =>
@@ -57,7 +56,8 @@ rootCommand.SetHandler(async adventOptions =>
         .AddTransient<ISolution, SupplyStacks>()
         .AddTransient<ISolution, TuningTrouble>()
         .AddTransient<ISolution, NoSpaceLeftOnDevice>()
-        .AddTransient<ISolution, TreetopTreeHouse>();
+        .AddTransient<ISolution, TreetopTreeHouse>()
+        .AddTransient<ISolution, CathodeRayTube>();
 
     var app = services
         .BuildServiceProvider()
