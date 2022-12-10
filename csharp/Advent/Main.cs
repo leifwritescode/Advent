@@ -1,4 +1,4 @@
-﻿using Advent;
+using Advent;
 using Advent.CommandLine;
 using Advent.Contracts;
 using Advent.Ornaments;
@@ -36,7 +36,6 @@ rootCommand.SetHandler(async adventOptions =>
     configuration.GetSection(TokenSettings.Section).Bind(tokens);
     ArgumentException.ThrowIfNullOrEmpty(tokens.Github);
 
-
     // Add new dependencies here
     services
          .AddLogging(logging =>
@@ -59,6 +58,7 @@ rootCommand.SetHandler(async adventOptions =>
         .AddTransient<ISolution, NoSpaceLeftOnDevice>()
         .AddTransient<ISolution, TreetopTreeHouse>()
         .AddTransient<ISolution, Day9>();
+        .AddTransient<ISolution, CathodeRayTube>();
 
     var app = services
         .BuildServiceProvider()
