@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.CommandLine;
-using System;
 
 var yearOption = new Option<int>(name: "--year", "the challenge year"); 
 var dayOption = new Option<int>("--day", "the challenge day");
@@ -57,7 +56,8 @@ rootCommand.SetHandler(async adventOptions =>
         .AddTransient<ISolution, TuningTrouble>()
         .AddTransient<ISolution, NoSpaceLeftOnDevice>()
         .AddTransient<ISolution, TreetopTreeHouse>()
-        .AddTransient<ISolution, CathodeRayTube>();
+        .AddTransient<ISolution, CathodeRayTube>()
+        .AddTransient<ISolution, MonkeyInTheMiddle>();
 
     var app = services
         .BuildServiceProvider()
