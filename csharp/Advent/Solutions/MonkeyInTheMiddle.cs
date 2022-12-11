@@ -1,5 +1,6 @@
 ﻿using Advent.Contracts;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace Advent.Solutions;
 
@@ -8,17 +9,20 @@ internal sealed class MonkeyInTheMiddle : SolutionBase
     private sealed class Monkey
     {
         private readonly Queue<long> items;
-        private readonly Func<long, long> operation;
+        private readonly string operation;
+        private readonly long rhsOperand;
         private readonly int outcomeIfTrue;
         private readonly int outcomeIfFalse;
         private readonly bool relief;
 
         public long Inspections { get; private set; } = 0;
+
         public long Test { get; }
 
-        public Monkey(Func<long, long> operation, long test, int outcomeIfTrue, int outcomeIfFalse, bool relief, params long[] items)
+        public Monkey(string operation, long rhsOperand, long test, int outcomeIfTrue, int outcomeIfFalse, bool relief, params long[] items)
         {
             this.operation = operation;
+            this.rhsOperand = rhsOperand;
             this.items = new Queue<long>(items);
             Test = test;
             this.outcomeIfTrue = outcomeIfTrue;
@@ -26,12 +30,25 @@ internal sealed class MonkeyInTheMiddle : SolutionBase
             this.relief = relief;
         }
 
+        private long Operate(long item)
+        {
+            return operation switch
+            {
+                "*" => item * rhsOperand,
+                "+" => item + rhsOperand,
+                "^" => item * item,
+                "-" => item - rhsOperand,
+                _ => throw new UnreachableException()
+            };
+        }
+
         public void Throw(IDictionary<int, Monkey> monkeys, long modulo)
         {
             while (items.Any())
             {
                 var item = items.Dequeue();
-                var worry = operation(item);
+                var worry = Operate(item);
+
                 if (relief)
                 {
                     worry /= 3;
@@ -41,6 +58,7 @@ internal sealed class MonkeyInTheMiddle : SolutionBase
                     // if part 2, use chinese remainder theorem instead
                     worry %= modulo;
                 }
+
                 var where = worry % Test == 0;
                 if (where)
                 {
@@ -50,6 +68,7 @@ internal sealed class MonkeyInTheMiddle : SolutionBase
                 {
                     monkeys[outcomeIfFalse].Give(worry);
                 }
+
                 Inspections++;
             }
         }
@@ -65,19 +84,65 @@ internal sealed class MonkeyInTheMiddle : SolutionBase
     {
     }
 
+    private IDictionary<int, Monkey> ParseInput(string input, bool part)
+    {
+        var blocks = input.ReplaceLineEndings().Split("Monkey ").Where(x => !string.IsNullOrWhiteSpace(x));
+        var counter = 0;
+        var dictionary = new Dictionary<int, Monkey>();
+        foreach (var block in blocks)
+        {
+            var operation = string.Empty;
+            var rhsOperand = 0L;
+            var test = 0L;
+            var outcomeIfTrue = 0;
+            var outcomeIfFalse = 0;
+            var items = new long[] { };
+
+            var enumerator = block.Split(Environment.NewLine).GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var line = ((string)enumerator.Current).Trim();
+                if (line.StartsWith("Monkey"))
+                {
+                    continue;
+                }
+                else if (line.StartsWith("Starting items: "))
+                {
+                    items = line.Substring("Starting items: ".Length).Split(',').Select(x => long.Parse(x)).ToArray();
+                }
+                else if (line.StartsWith("Operation: new = old "))
+                {
+                    var parts = line.Substring("Operation: new = old ".Length).Split(' ');
+                    operation = parts.First();
+                    if (!long.TryParse(parts.Last(), out rhsOperand))
+                    {
+                        operation = "^";
+                        rhsOperand = 0L;
+                    }
+                }
+                else if (line.StartsWith("Test: divisible by "))
+                {
+                    test = long.Parse(line.Substring("Test: divisible by ".Length));
+                }
+                else if (line.StartsWith("If true: throw to monkey "))
+                {
+                    outcomeIfTrue = int.Parse(line.Substring("If true: throw to monkey ".Length));
+                }
+                else if (line.StartsWith("If false: throw to monkey "))
+                {
+                    outcomeIfFalse = int.Parse(line.Substring("If false: throw to monkey ".Length));
+                }
+            }
+
+            dictionary.Add(counter, new Monkey(operation, rhsOperand, test, outcomeIfTrue, outcomeIfFalse, part, items));
+            counter++;
+        }
+        return dictionary;
+    }
+
     protected override async Task<string> SolvePartOneAsync(IContext context)
     {
-        var monkeys = new Dictionary<int, Monkey>()
-        {
-            { 0, new Monkey(v => v * 3, 5, 2, 7, true, 78, 53, 89, 51, 52, 59, 58, 85) },
-            { 1, new Monkey(v => v + 7, 2, 3, 6, true, 64) },
-            { 2, new Monkey(v => v + 5, 13, 5, 4, true, 71, 93, 65, 82) },
-            { 3, new Monkey(v => v + 8, 19, 6, 0, true, 67, 73, 95, 75, 56, 74) },
-            { 4, new Monkey(v => v + 4, 11, 3, 1, true, 85, 91, 90) },
-            { 5, new Monkey(v => v * 2, 3, 4, 1, true, 67, 96, 69, 55, 70, 83, 62) },
-            { 6, new Monkey(v => v + 6, 7, 7, 0, true, 53, 86, 98, 70, 64) },
-            { 7, new Monkey(v => v * v, 17, 2, 5, true, 88, 64) },
-        };
+        var monkeys = ParseInput(context.Input, true);
 
         var rounds = 20;
         var round = 0;
@@ -101,17 +166,7 @@ internal sealed class MonkeyInTheMiddle : SolutionBase
 
     protected override async Task<string> SolvePartTwoAsync(IContext context)
     {
-        var monkeys = new Dictionary<int, Monkey>()
-        {
-            { 0, new Monkey(v => v * 3, 5, 2, 7, false, 78, 53, 89, 51, 52, 59, 58, 85) },
-            { 1, new Monkey(v => v + 7, 2, 3, 6, false, 64) },
-            { 2, new Monkey(v => v + 5, 13, 5, 4, false, 71, 93, 65, 82) },
-            { 3, new Monkey(v => v + 8, 19, 6, 0, false, 67, 73, 95, 75, 56, 74) },
-            { 4, new Monkey(v => v + 4, 11, 3, 1, false, 85, 91, 90) },
-            { 5, new Monkey(v => v * 2, 3, 4, 1, false, 67, 96, 69, 55, 70, 83, 62) },
-            { 6, new Monkey(v => v + 6, 7, 7, 0, false, 53, 86, 98, 70, 64) },
-            { 7, new Monkey(v => v * v, 17, 2, 5, false, 88, 64) },
-        };
+        var monkeys = ParseInput(context.Input, false);
 
         var rounds = 10000;
         var round = 0;
