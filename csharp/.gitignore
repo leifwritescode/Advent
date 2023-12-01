@@ -399,3 +399,5 @@ FodyWeavers.xsd
 
 # hide the real appsettings.json
 appsettings.json
+
+*.db
