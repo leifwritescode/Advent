@@ -1,5 +1,3 @@
-using System.Text.RegularExpressions;
-using Microsoft.VisualBasic;
 using Ornaments.Solutions;
 
 [RegisterOrnament("Gear Ratios", 2023, 3)]
