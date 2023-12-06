@@ -54,7 +54,54 @@ internal sealed partial class GearRatios : ISolution
 
     public async Task<object> DoPartTwoAsync(ISolutionContext solutionContext)
     {
-        return await Task.FromResult(9);
+        var result = 0;
+        var map = solutionContext.As<char[,]>();
+        var hit = new bool[map.GetLength(0), map.GetLength(1)];
+        Parallel.For(0, map.Length, i => {
+            var x = i % map.GetLength(0);
+            var y = i / map.GetLength(0);
+
+            var g = map[x, y];
+            if (g != '*')
+            {
+                return;
+            }
+
+            List<int> parts = new List<int>();
+            for (var y2 = y - 1; y2 <= y + 1; ++y2)
+            {
+                for (var x2 = x - 1; x2 <= x + 1; ++x2)
+                {
+                    // Skip self
+                    if (x2 == x && y2 == y)
+                    {
+                        continue;
+                    }
+
+                    // Skip out of bounds
+                    if (x2 < 0 || x2 >= map.GetLength(0) || y2 < 0 || y2 >= map.GetLength(1))
+                    {
+                        continue;
+                    }
+
+                    if (char.IsDigit(map[x2, y2]) && !hit[x2, y2])
+                    {
+                        // find the actual numbers
+                        var rec = ReconstructNumber(map, hit, x2, y2);
+                        var num = int.Parse(rec);
+                        parts.Add(num);
+                    }
+                }
+            }
+
+            if (parts.Count() == 2)
+            {
+                var ratio = parts.First() * parts.Last();
+                Interlocked.Add(ref result, ratio);
+            }
+        });
+
+        return await Task.FromResult(result);
     }
 
     public bool TryParse(string input, out object parsed)
