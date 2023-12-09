@@ -1,63 +1,8 @@
 using Ornaments.Solutions;
 
-internal class Mapping
-{
-    private readonly long _sourceStart;
-    private readonly long _destinationStart;
-    private readonly long _length;
+internal record Range(long From, long To);
 
-    public Mapping(long destinationStart, long sourceStart, long length)
-    {
-        _destinationStart = destinationStart;
-        _sourceStart = sourceStart;
-        _length = length;
-    }
-
-    public long Map(long sourceValue)
-    {
-        // it doesn't map to this range
-        if (sourceValue < _sourceStart || sourceValue >= _sourceStart + _length)
-        {
-            return -1;
-        }
-
-        return _destinationStart + (sourceValue - _sourceStart);
-    }
-
-    public bool InSource(long sourceValue)
-    {
-        return sourceValue >= _sourceStart && sourceValue < _sourceStart + _length;
-    }
-
-    public bool InDestination(long destinationValue)
-    {
-        return destinationValue >= _destinationStart && destinationValue < _destinationStart + _length;
-    }
-}
-
-internal enum Mappings
-{
-    SeedToSoil = 0,
-    SoilToFertilizer,
-    FertilizerToWater,
-    WaterToLight,
-    LightToTemperature,
-    TemperatureToHumidity,
-    HumidityToLocatiom
-}
-
-internal class Almanac
-{
-    public long[] Seeds;
-
-    public Mapping[][] Mappings;
-
-    public Almanac(long[] seeds, Mapping[][] mappings)
-    {
-        Seeds = seeds;
-        Mappings = mappings;
-    }
-}
+internal record Almanac(long[] Seeds, IEnumerable<IDictionary<Range, Range>> Maps);
 
 [RegisterOrnament("If You Give A Seed A Fertilizer", 2023, 5)]
 internal sealed partial class Fertilizer : ISolution
@@ -65,88 +10,58 @@ internal sealed partial class Fertilizer : ISolution
     public async Task<object> DoPartOneAsync(ISolutionContext solutionContext)
     {
         var almanac = solutionContext.As<Almanac>();
-        var seeds = almanac.Seeds;
-        foreach (var value in Enum.GetValues<Mappings>())
-        {
-            var mappings = almanac.Mappings[(int)value];
-            seeds = seeds.Select(seed => {
-                var m = mappings?.FirstOrDefault(mapping => mapping.Map(seed) != -1);
-                if (m is null) {
-                    return seed;
-                } else {
-                    return m.Map(seed);
-                }
-            }).ToArray();
-        }
-        return await Task.FromResult(seeds.Min());
+        var seeds = almanac.Seeds.Select(seed => new Range(seed, seed));
+        return await Solve(seeds, almanac.Maps);
     }
 
     public async Task<object> DoPartTwoAsync(ISolutionContext solutionContext)
-    {
-        // for part 2, i need to reinterpret what the seeds are (that is, pairs descriing start and range)
-        // to achieve the same end i need to process each range one at a time, using parallel for an interlocked replace.
+    { 
+        // 2695483 too low
         var almanac = solutionContext.As<Almanac>();
-
-        // extract the ranges
-        var seeds = new long[almanac.Seeds.Length / 2][];
-        for (var i = 0; i < almanac.Seeds.Length; i += 2)
-        {
-            seeds[i / 2] = new long[] { almanac.Seeds[i], almanac.Seeds[i + 1] };
-        }
-
-        // process each range
-        Console.WriteLine("Processing {0} ranges", seeds.Length);
-        Console.WriteLine(string.Join(',', seeds.Select(s => $"[{s[0]},{s[1]}]")));
-        var mins = (long[])Array.CreateInstance(typeof(long), almanac.Seeds.Length / 2);
-        for (var i = 0; i < seeds.Length; i++) {
-            var pair = seeds[i];
-            Console.WriteLine("Processing range {0} to {1}", pair[0], pair[0] + pair[1]);
-            Parallel.For(0, pair[1], idx => {
-                var seed = pair[0] + idx;
-
-                foreach (var value in Enum.GetValues<Mappings>())
-                {
-                    var mappings = almanac.Mappings[(int)value];
-                    var m = mappings?.FirstOrDefault(mapping => mapping.Map(seed) != -1);
-                    if (m is null) {
-                        continue;
-                    } else {
-                        seed = m.Map(seed);
-                    }
-                }
-
-                Interlocked.CompareExchange(ref mins[i], seed, (seed < mins[i] || mins[i] == 0) ? seed : mins[i]);
-            });
-        }
-
-        return await Task.FromResult(mins.Min());
+        var seeds = almanac.Seeds.Chunk(2).Select(seed => new Range(seed[0], seed[1] + seed[0] - 1));
+        return await Solve(seeds, almanac.Maps);
     }
 
     public bool TryParse(string input, out object parsed)
     {
-        var lines = input.Trim().ReplaceLineEndings().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+        var lines = input.Trim().ReplaceLineEndings().Split($"{Environment.NewLine}{Environment.NewLine}", StringSplitOptions.RemoveEmptyEntries);
         var seeds = lines[0].Split(':').Last().Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(long.Parse).ToArray();
-
-        lines = lines.Skip(2).ToArray();
-        var mappings = new Mapping[Enum.GetValues<Mappings>().Length][];
-        foreach (var mapping in Enum.GetValues<Mappings>())
-        {
-            // get the numbers
-            var raw = lines.TakeWhile(line => !line.Contains(':')).ToArray();
-            foreach (var line in raw) {
+        var maps = lines.Skip(1).Select(line => {
+            var data = line.Split(Environment.NewLine).Skip(1);
+            return data.Select(line => {
                 var longs = line.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(long.Parse).ToArray();
-                var range = new Mapping(longs[0], longs[1], longs[2]);
-                if (mappings[(int)mapping] == null)
-                    mappings[(int)mapping] = new Mapping[] { range };
-                else
-                    mappings[(int)mapping] = mappings[(int)mapping].Append(range).ToArray();
-            }
-
-            // go to the end of the range, and then skip it
-            lines = lines.SkipWhile(line => !line.Contains(':')).Skip(1).ToArray();
-        }
-
-        parsed = new Almanac(seeds, mappings);
+                var from = new Range(longs[1], longs[1] + longs[2] - 1);
+                var to = new Range(longs[0], longs[0] + longs[2] - 1);
+                return new KeyValuePair<Range, Range>(from, to);
+            }).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        });
+        parsed = new Almanac(seeds, maps.ToArray());
         return true;
+    }
+
+    private async Task<object> Solve(IEnumerable<Range> seeds, IEnumerable<IDictionary<Range, Range>> maps)
+    {
+        return await Task.FromResult(maps.Aggregate(seeds, (a, b) => {
+            var outputRange = new List<Range>();
+            var todo = new Queue<Range>(a);
+            while (todo.TryDequeue(out var inputRange)) {
+                var src = b.Keys.FirstOrDefault(range => inputRange.From <= range.To && range.From <= inputRange.To);
+                if (src is null) {
+                    outputRange.Add(inputRange);
+                } else if (src.From <= inputRange.From && inputRange.To <= src.To) {
+                    var dest = b[src];
+                    var from = inputRange.From - src.From + dest.From;
+                    var to = inputRange.To - src.From + dest.From;
+                    outputRange.Add(new Range(from, to));
+                } else if (inputRange.From < src.From) {
+                    todo.Enqueue(new Range(inputRange.From, src.From - 1));
+                    todo.Enqueue(new Range(src.From, inputRange.To));
+                } else {
+                    todo.Enqueue(new Range(inputRange.From, src.To));
+                    todo.Enqueue(new Range(src.To + 1, inputRange.To));
+                }
+            }
+            return outputRange;
+        }).Select(range => range.From).Min());
     }
 }
