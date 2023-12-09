@@ -1,5 +1,7 @@
 using Ornaments.Solutions;
 
+namespace Advent.Solutions;
+
 [RegisterOrnament("Wait For It", 2023, 6)]
 internal sealed partial class WaitForIt : ISolution
 {

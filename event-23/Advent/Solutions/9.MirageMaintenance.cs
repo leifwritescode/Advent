@@ -1,5 +1,7 @@
 using Ornaments.Solutions;
 
+namespace Advent.Solutions;
+
 [RegisterOrnament("Mirage Maintenance", 2023, 9)]
 internal sealed partial class MirageMaintenance : ISolution
 {

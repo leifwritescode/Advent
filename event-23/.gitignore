@@ -402,3 +402,7 @@ appsettings.json
 
 *.db
 *.db-*
+
+ornament.db
+ornament.db-shm
+ornament.db-wal

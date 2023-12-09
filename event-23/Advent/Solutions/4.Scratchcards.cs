@@ -1,5 +1,7 @@
 using Ornaments.Solutions;
 
+namespace Advent.Solutions;
+
 [RegisterOrnament("Scratchcards", 2023, 4)]
 internal sealed partial class Scratchcards : ISolution
 {

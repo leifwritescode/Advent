@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 using Ornaments.App;
 using Ornaments.Solutions;
 
-namespace Advent;
+namespace Advent.Solutions;
 
 [RegisterOrnament("Cube Conundrum", 2023, 2)]
 internal sealed partial class CubeConundrum : ISolution
