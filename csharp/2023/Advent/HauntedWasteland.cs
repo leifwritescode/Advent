@@ -5,7 +5,7 @@ internal class Map
 {
     public string Instructions { get; init; }
 
-    private IDictionary<string, (string, string)> Nodes { get; init; }
+    public IDictionary<string, (string, string)> Nodes { get; init; }
 
     public Map(string instruction, IDictionary<string, (string, string)> map)
     {
@@ -47,7 +47,20 @@ internal sealed partial class HauntedWasteland : ISolution
 
     public async Task<object> DoPartTwoAsync(ISolutionContext solutionContext)
     {
-        return await Task.FromResult(-1);
+        var input = solutionContext.As<Map>();
+        var current = input.Nodes.Keys.Where(k => k.EndsWith("A")).ToArray();
+        var steps = new int[current.Length];
+
+        for (var i = 0; i < current.Length; i++)
+        {
+            while (!current[i].EndsWith("Z"))
+            {
+                var direction = input.Instructions[steps[i]++ % input.Instructions.Length];
+                current[i] = input.GetNext(current[i], direction);
+            }
+        }
+
+        return await Task.FromResult(LeastCommonMultiple(steps));
     }
 
     public bool TryParse(string input, out object parsed)
@@ -61,5 +74,28 @@ internal sealed partial class HauntedWasteland : ISolution
         );
         parsed = new Map(instructions, nodes);
         return true;
+    }
+
+    private long LeastCommonMultiple(int[] numbers)
+    {
+        return numbers.Aggregate((long)numbers.First(), (a, b) => LowestCommonMultiple(a, b));
+    }
+
+    private long LowestCommonMultiple(long a, long b)
+    {
+        var gcd = GreatestCommonDivisor(a, b);
+        return a / gcd * b;
+    }
+
+    private long GreatestCommonDivisor(long a, long b)
+    {
+        while (b != 0)
+        {
+            var temp = b;
+            b = a % b;
+            a = temp;
+        }
+
+        return a;
     }
 }
