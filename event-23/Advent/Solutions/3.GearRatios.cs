@@ -1,5 +1,7 @@
 using Ornaments.Solutions;
 
+namespace Advent.Solutions;
+
 [RegisterOrnament("Gear Ratios", 2023, 3)]
 internal sealed partial class GearRatios : ISolution
 {

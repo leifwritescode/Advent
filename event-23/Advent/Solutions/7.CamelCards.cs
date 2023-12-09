@@ -1,5 +1,7 @@
 using Ornaments.Solutions;
 
+namespace Advent.Solutions;
+
 [RegisterOrnament("Camel Cards", 2023, 7)]
 internal sealed partial class CamelCards : ISolution
 {

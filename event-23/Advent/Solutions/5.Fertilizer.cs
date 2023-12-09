@@ -1,5 +1,7 @@
 using Ornaments.Solutions;
 
+namespace Advent.Solutions;
+
 internal record Range(long From, long To);
 
 internal record Almanac(long[] Seeds, IEnumerable<IDictionary<Range, Range>> Maps);

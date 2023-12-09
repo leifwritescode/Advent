@@ -1,6 +1,8 @@
 using System.Text.RegularExpressions;
 using Ornaments.Solutions;
 
+namespace Advent.Solutions;
+
 internal class Map
 {
     public string Instructions { get; init; }

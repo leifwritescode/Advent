@@ -2,7 +2,7 @@ using Ornaments.App;
 using Ornaments.Solutions;
 using System.Text.RegularExpressions;
 
-namespace Advent;
+namespace Advent.Solutions;
 
 [RegisterOrnament("Trebuchet!?", 2023, 1)]
 internal sealed partial class Trebuchet : ISolution
