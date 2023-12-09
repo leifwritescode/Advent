@@ -1,7 +1,3 @@
-# Advent
+# Leif's Advent of Code
 
-This repository contains my solutions to challenges presented in Eric Wastl's _Advent of Code_. Each year, I use a new language to solve the challenges.
-
-Most recently, in 2021, I used Go. In 2020, I used Swift. In my first year of participation, 2019, I used Kotlin. In addition to each years solutions, I have implemented solutions for challenges from several previous years too.
-
-Each language subdirectory contains its own README.md with additional information.
+This repository contains my solutions to challenges presented in Eric Wastl's _Advent of Code_. Each year, I like to try a completing the challenges in a new-to-me language. For the last two event years, as a result of time constraints, I stuck with C#. I used Go, Swift, and Kotlin in 2021, 2020, and 2019 respectively. I have completeted a variety of challenges from previous years in those languages, too.
