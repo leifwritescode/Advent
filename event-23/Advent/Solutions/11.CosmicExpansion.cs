@@ -70,46 +70,28 @@ internal sealed partial class CosmicExpansion : ISolution
         var minY = galaxies.Min(g => g.y);
         var maxY = galaxies.Max(g => g.y);
 
-        // make a record of how much each galaxy shifts
-        var expansions = galaxies.ToDictionary(g => g, g => (0L, 0L));
+        var expansionsInY = EnumerateRange(minY, maxY).Where(v => !galaxies.Any(g => g.y == v));
+        var expansionsInX = EnumerateRange(minX, maxX).Where(v => !galaxies.Any(g => g.x == v));
 
-        // expand rows
-        for (var y = minY; y <= maxY; ++y)
-        {
-            if (galaxies.Any(g => g.y == y))
-            {
-                continue;
-            }
+        var expanded = galaxies.Select(g => {
+            var (x, y) = g;
+            var dx = expansionsInX.Count(v => v < x) * expandBy;
+            var dy = expansionsInY.Count(v => v < y) * expandBy;
+            return (x + dx, y + dy);
+        });
 
-            // no galaxies => expand
-            var shifted = expansions.Keys.Where(g => g.y > y);
-            foreach (var galaxy in shifted)
-            {
-                expansions[galaxy] = (expansions[galaxy].Item1, expansions[galaxy].Item2 + expandBy);
-            }
-        }
-
-        // expand columns
-        for (var x = minX; x <= maxX; ++x)
-        {
-            if (galaxies.Any(g => g.x == x))
-            {
-                continue;
-            }
-
-            // no galaxies => expand
-            var shifted = expansions.Keys.Where(g => g.x > x);
-            foreach (var galaxy in shifted)
-            {
-                expansions[galaxy] = (expansions[galaxy].Item1 + expandBy, expansions[galaxy].Item2);
-            }
-        }
-
-        galaxies = expansions.Select(g => (g.Key.x + g.Value.Item1, g.Key.y + g.Value.Item2));
-        var combinations = Combinations(galaxies);
+        var combinations = Combinations(expanded);
 
         // order by the manhattan distance between each pair of galaxies
         var sum = combinations.Sum(g => Math.Abs(g.Item1.Item1 - g.Item2.Item1) + Math.Abs(g.Item1.Item2 - g.Item2.Item2));
         return sum;
+    }
+
+    private IEnumerable<long> EnumerateRange(long start, long end)
+    {
+        for (var i = start; i <= end; ++i)
+        {
+            yield return i;
+        }
     }
 }
