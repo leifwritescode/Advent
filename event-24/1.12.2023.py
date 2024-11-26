@@ -1,12 +1,8 @@
 import re
+from utilities import read_input
 
 
 atoi = [ 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'eno', 'owt', 'eerht', 'ruof', 'evif', 'xis', 'neves', 'thgie', 'enin' ]
-
-
-def read_input():
-    raw = open('1.12.2023.txt', 'r')
-    return raw.readlines()
 
 
 def part_two():
