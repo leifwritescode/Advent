@@ -2,6 +2,7 @@ from utilities import read_input
 from functools import reduce
 from collections import Counter
 
+
 def part_one():
     lines = read_input()
     # ["1   2", "3   4"] -> [(1, 2), (3, 4)] -> [[1, 3], [2, 4]] -> [1, 3], [2, 4]
@@ -15,6 +16,7 @@ def part_two():
     left_list, right_list = zip(*[tuple(map(int, line.split())) for line in lines])
     right_counts = Counter(right_list)
     return sum(num * right_counts[num] for num in left_list)
+
 
 def main():
     print(part_one())
