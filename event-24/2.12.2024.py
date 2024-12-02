@@ -1,10 +1,9 @@
 from utilities import read_input
 
+
 def is_serie_safe(serie):
-    increasing = all(serie[i] < serie[i + 1] for i in range(len(serie) - 1))
-    decreasing = all(serie[i] > serie[i + 1] for i in range(len(serie) - 1))
-    safe = all(abs(serie[i] - serie[i + 1]) <= 3 and abs(serie[i] - serie[i+1]) >= 1 for i in range(len(serie) - 1))
-    return (increasing or decreasing) and safe
+    gaps = [serie[i+1] - serie[i] for i in range(len(serie) - 1)]
+    return (max(gaps) <= 3 and min(gaps) >= 1) or (max(gaps) <= -1 and min(gaps) >= -3)
 
 
 def check_serie_part_one(serie):
@@ -18,16 +17,7 @@ def part_one():
 
 
 def check_serie_part_two(serie):
-    if is_serie_safe(serie):
-        return 1
-
-    # in the event of an unsafe serie, we can remove a value sequentially and try again
-    # this is probably not the way eric intended
-    for i in range(len(serie)):
-        if is_serie_safe(serie[:i] + serie[i+1:]):
-            return 1
-
-    return 0
+    return 1 if any([is_serie_safe(serie[:i]+serie[i+1:]) for i in range(len(serie))]) else 0
 
 
 def part_two():
