@@ -1,4 +1,4 @@
-from utilities import read_input
+from utilities import read_input, timed
 
 
 def part_one():
@@ -12,8 +12,11 @@ def part_two():
 
 
 def main():
-    print(part_one())
-    print(part_two())
+    res = timed(lambda: part_one())
+    print("part 1:", res)
+
+    res = timed(lambda: part_two())
+    print("part 2:", res)
 
 
 if __name__ == '__main__':
