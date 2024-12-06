@@ -15,5 +15,5 @@ def timed(function):
     start = time.time()
     ret = function()
     end = time.time()
-    print("finished execution in", end - start, "seconds")
+    print("finished execution in", round(end - start, 3), "seconds")
     return ret
