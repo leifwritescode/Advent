@@ -49,7 +49,14 @@ def validate_equation_part_2(target, operands):
     
     a = validate_equation_part_2(target / val, operands[:-1])
     b = validate_equation_part_2(target - val, operands[:-1])
+
+    # we should only ever test concatenation if it is
+    # possible that concatenation occurred
     if str(int(target)).endswith(str(int(val))):
+        # we can strip the end off the concatenated number
+        # by dividing it by 10 ^ len(val)
+        # e.g. 198, concatenated from 19 and 8, would be 198 / 10
+        # we intentionally floor the output
         c = validate_equation_part_2(target // (10 ** len(str(int(val)))), operands[:-1])
         return a or b or c
     return a or b
