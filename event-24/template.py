@@ -1,18 +1,23 @@
 from utilities import read_input, timed
 
 
-def part_one():
+def prepare_input():
     lines = read_input()
-    return 0
+    return lines
 
 
-def part_two():
-    lines = read_input()
-    return 0
+def part_one(input):
+    return -1
+
+
+def part_two(input):
+    return -1
 
 
 def main():
-    res = timed(lambda: part_one())
+    input = prepare_input()
+
+    res = timed(lambda: part_one(input))
     print("part 1:", res)
 
     res = timed(lambda: part_two())
