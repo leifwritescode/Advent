@@ -74,20 +74,13 @@ def find_contiguous_span_of(value, array):
     return (start, run)
 
 
-def cache_free_spans(storage):
-    """
-    Given a storage array, caches the results of find_contiguous_span_of across the full storage
-    """
+def cache_free_spans(files, spaces):
     cached_spans = { }
-
-    offset = 0
-    span = find_contiguous_span_of(-1, storage[offset:])
-    while span[0] != -1:
-        cached_spans[offset + span[0]] = span[1]
-
-        offset += span[0] + span[1]
-        span = find_contiguous_span_of(-1, storage[offset:])
-
+    index = 0
+    for x in zip(files, spaces):
+        if x[1] != 0:
+            cached_spans[index + x[0]] = x[1]
+        index += x[0] + x[1]
     return cached_spans
 
 
@@ -149,7 +142,7 @@ def part_two(input):
     files, spaces = input
 
     storage = expand_drive_map(files, spaces)
-    cached_spans = cache_free_spans(storage)
+    cached_spans = cache_free_spans(files, spaces)
     compress_storage_by_span(storage, cached_spans)
 
     return sum([x[0] * x[1] for x in enumerate(storage) if x[1] != -1])
