@@ -1,6 +1,7 @@
 from utilities import read_input, timed
 from collections import defaultdict
 
+
 def prepare_input():
     line = read_input()[0]
     stones = defaultdict(int)
