@@ -20,7 +20,7 @@ def main():
     res = timed(lambda: part_one(input))
     print("part 1:", res)
 
-    res = timed(lambda: part_two())
+    res = timed(lambda: part_two(input))
     print("part 2:", res)
 
 
