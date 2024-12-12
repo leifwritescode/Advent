@@ -7,69 +7,83 @@ def prepare_input():
     for y in enumerate(lines):
         for x in enumerate(y[1]):
             grid[(x[0], y[0])] = x[1]
-    return grid, len(lines[0]), len(lines)
+    return grid
 
 
-def neighbours(cell):
+def find_neighbours(cell):
     vectors = [(-1, 0), (0, -1), (1, 0), (0, 1)]
     return [(cell[0] + vector[0], cell[1] + vector[1]) for vector in vectors]
 
 
-def search_for_all_neighbours(graph, visited, grid, plots, cell, plot_key):
-    if cell in visited:
-        return
-
-    # mark that we've visited this cell
-    visited.add(cell)
-
-    # exclude any neighbours that don't match the current cell
-    next_cells = [next_cell for next_cell in neighbours(cell) if next_cell in grid and grid[next_cell] == grid[cell]]
-
-    # graph is just a mapping of possible paths from cell
-    graph[cell] = next_cells
-
-    # update the current plot with the sides at this cell
-    if plot_key not in plots:
-        plots[plot_key] = []
-    plots[plot_key] += [4 - len(next_cells)]
-
-    # if there is no work to do, return up stream
-    if not len(next_cells):
-        return
-    
-    # examine each of the neighbouring cells
-    for next_cell in next_cells:
-        search_for_all_neighbours(graph, visited, grid, plots, next_cell, plot_key)
-
-
-def part_one(input):
-    grid, w, h = input
-
-    graph = { } # a graph of cells and their similar neighbours
-    plots = { }
-    visited = set()
-    for y in range(h):
-        for x in range(w):
-            if (x, y) in visited:
+def find_region(start, grid):
+    queue = [ start ]
+    plant = grid[start]
+    region = { start }
+    while queue:
+        cell = queue.pop()
+        neighbours = find_neighbours(cell)
+        for neighbour in neighbours:
+            if neighbour not in grid:
                 continue
-            plot_key = (x, y, grid[(x, y)])
-            search_for_all_neighbours(graph, visited, grid, plots, (x, y), plot_key)
+            if neighbour not in region and grid[neighbour] == plant:
+                queue.append(neighbour)
+                region.add(neighbour)
+    return region
 
-    return sum([len(plots[plot]) * sum(plots[plot]) for plot in plots]), graph
+
+def find_regions(grid):
+    candidates = { key for key in grid }
+    regions = []
+    while candidates:
+        start = candidates.pop()
+        region = find_region(start, grid)
+        candidates -= region
+        regions += [region]
+    return regions
 
 
-def part_two(input, graph):
-    grid, w, h = input
-    return -1
+def sum_perimiter(region):
+    result = 0
+    for cell in region:
+        result += 4 - len([neighbour for neighbour in find_neighbours(cell) if neighbour in region])
+    return result * len(region)
+
+
+def part_one(grid):
+    return sum([sum_perimiter(region) for region in find_regions(grid)])
+
+
+def sum_sides(region):
+    edges = set()
+    for cell in region:
+        edges.update([(cell, neighbour) for neighbour in find_neighbours(cell) if neighbour not in region])
+
+    sides = 0
+    for cell, neighbour in edges:
+        if cell[1] == neighbour[1]:
+            a = (cell[0], cell[1] - 1)
+            b = (neighbour[0], neighbour[1] - 1)
+            if (a, b) not in edges:
+                sides += 1
+        else:
+            a = (cell[0] - 1, cell[1])
+            b = (neighbour[0] - 1, neighbour[1])
+            if (a, b) not in edges:
+                sides += 1
+    return sides * len(region)
+
+
+def part_two(grid):
+    return sum([sum_sides(region) for region in find_regions(grid)])
 
 
 def main():
     input = prepare_input()
 
-    res, graph = timed(lambda: part_one(input))
+    res = timed(lambda: part_one(input))
     print("part 1:", res)
 
-    res = timed(lambda: part_two(input, graph))
+    res = timed(lambda: part_two(input))
     print("part 2:", res)
 
 
