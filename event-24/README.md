@@ -1,7 +1,7 @@
 Execution times on M3 Max
 
 | Day | Part 1 | Part 2 |
-| --- | --- | --- |
+--- | --- | ---
 | 1 | 1ms | 1ms |
 | 2 | 3ms | 4ms |
 | 3 | <1ms | <1ms |
