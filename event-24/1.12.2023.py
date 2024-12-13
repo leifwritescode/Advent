@@ -1,5 +1,5 @@
 import re
-from utilities import read_input
+from utilities import read_input, timed
 
 
 atoi = [ 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'eno', 'owt', 'eerht', 'ruof', 'evif', 'xis', 'neves', 'thgie', 'enin' ]
@@ -27,8 +27,8 @@ def part_one():
 
 
 def main():
-    print(part_one())
-    print(part_two())
+    print(timed(lambda: part_one()))
+    print(timed(lambda: part_two()))
 
 
 if __name__ == '__main__':

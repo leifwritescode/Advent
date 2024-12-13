@@ -1,5 +1,4 @@
-from utilities import read_input
-from functools import reduce
+from utilities import read_input, timed
 from collections import defaultdict, deque
 
 
@@ -101,8 +100,8 @@ def part_two():
 
 
 def main():
-    print(part_one())
-    print(part_two())
+    print(timed(lambda: part_one()))
+    print(timed(lambda: part_two()))
 
 
 if __name__ == '__main__':

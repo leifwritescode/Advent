@@ -1,4 +1,4 @@
-from utilities import read_input
+from utilities import read_input, timed
 from functools import reduce
 
 
@@ -84,8 +84,8 @@ def part_two():
 
 
 def main():
-    print(part_one())
-    print(part_two())
+    print(timed(lambda: part_one()))
+    print(timed(lambda: part_two()))
 
 
 if __name__ == '__main__':
