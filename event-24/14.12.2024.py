@@ -46,20 +46,19 @@ def part_one(grid):
 
 
 def part_two(grid):
-    cycles = 0
+    bots = sum(len(grid[key]) for key in grid)
+
+    cycles = 100
     max_cycles = w * h
 
     # we can assume that, if they're arranged like a tree, it will be the first cycle where no two robots share a space
-    while any(len(grid[key]) != 1 for key in grid) and cycles < max_cycles:
+    while cycles < max_cycles:
+        positions = set([((pos[0] + cycles * vector[0]) % w, (pos[1] + cycles * vector[1]) % h) for pos in grid for vector in grid[pos]])
+
+        if bots == len(positions):
+            break
+
         cycles += 1
-
-        new_grid = defaultdict(list)
-        for pos in grid:
-            for vector in grid[pos]:
-                new_pos = (pos[0] + vector[0]) % w, (pos[1] + vector[1]) % h
-                new_grid[new_pos].append(vector)
-
-        grid = new_grid
 
     return cycles
 
