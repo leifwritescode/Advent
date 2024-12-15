@@ -102,21 +102,40 @@ def can_i_go_here_2(g, p, m):
     # depending on which side we are on, a box is either represented by a [ or a ]
     # if it's a [, then we also need to check if the cell to the right can move.
     # if it's a ], then we also need to check if the cell to the left can move.
+    # boxes still only move one cell at a time, not two, so
     # if yes, then our p is valid
     new_p_l = None
     new_p_r = None
-    if g[p] == "[":
-        new_p_l = (p[0] + (m[0] * 2), p[1] + m[1])
-        new_p_r = (p[0] + (m[0] * 2) + 1, p[1] + m[1])
-    elif g[p] == "]":
-        new_p_l = (p[0] + (m[0] * 2) - 1, p[1] + m[1])
+    if m[0] == 0: # we're moving down
+        if g[p] == "[":
+            new_p_l = (p[0] + m[0], p[1] + m[1])
+            new_p_r = (p[0] + m[0] + 1, p[1] + m[1])
+        else:
+            new_p_l = (p[0] + m[0] - 1, p[1] + m[1])
+            new_p_r = (p[0] + m[0], p[1] + m[1])
+    else:
+        # if we're testing moving left/right, then we only need to check the cell 2*m from us
+        new_p_l = (p[0] + (m[0] * 2), p[1] + m[1]) 
         new_p_r = (p[0] + (m[0] * 2), p[1] + m[1])
 
     if can_i_go_here_2(g, new_p_l, m) and can_i_go_here_2(g, new_p_r, m):
-        print("i am moving a box")
-        g[p] = "."
-        g[new_p_l] = "["
-        g[new_p_r] = "]"
+        if new_p_r == new_p_l: # we're going left/right
+            if g[p] == "[": # we are on the left
+                print("i am moving a box right")
+                g[(p[0] + m[0], p[1] + m[1])] = "["
+                g[(p[0] + (m[0] * 2), p[1] + m[1])] = "]"
+                g[p] = "."
+            else: # we are on the right
+                print("i am moving a box left")
+                g[(p[0] + m[0], p[1] + m[1])] = "]"
+                g[(p[0] + (m[0] * 2), p[1] + m[1])] = "["
+                g[p] = "."
+        else:
+            print("i am moving a box up or down")
+            g[new_p_l] = "["
+            g[new_p_r] = "]"
+            g[(new_p_l[0], new_p_l[1] - m[1])] = "."
+            g[(new_p_r[0], new_p_r[1] - m[1])] = "."
         return True
 
     return False
@@ -131,26 +150,30 @@ def move_2(g, m, p):
     return p
 
 
+def print_grid(g, p):
+    for y in range(max(key[1] for key in g) + 1):
+        line = ""
+        for x in range(max(key[0] for key in g) + 1):
+            if (x, y) == p:
+                line += "@"
+            else:
+                line += g[(x, y)]
+        print(line)
+    sleep(1)
+
+
 def part_two(input):
     # fresh grid, scale out, adjust start
     grid, moves, position = prepare_input()
     scaled_map = scale_up_map(grid)
     position = (position[0] * 2, position[1])
 
+    #print_grid(scaled_map, position)
     for m in moves:
-        position = move_2(grid, vectors[m], position)
-        for y in range(max(key[1] for key in scaled_map) + 1):
-            line = ""
-            for x in range(max(key[0] for key in scaled_map) + 1):
-                if (x, y) == position:
-                    line += "@"
-                else:
-                    line += scaled_map[(x, y)]
-            print(line)
-        sleep(3)
-
-
-
+        print("moving", m)
+        position = move_2(scaled_map, vectors[m], position)
+    #    print_grid(scaled_map, position)
+    print_grid(scaled_map, position)
     return -1
 
 def main():
