@@ -1,5 +1,5 @@
 from utilities import read_input, timed
-from collections import namedtuple, defaultdict
+from collections import namedtuple, defaultdict, deque
 from sys import maxsize
 
 directions = [(1, 0), (0, -1), (-1, 0), (0, 1)]
@@ -75,12 +75,27 @@ def part_one(input):
 
 
 def part_two(input):
-    for x in range(initial_cutoff, len(input)):
-        fallen_bytes = input[:x]
-        if not a_star(fallen_bytes, Point(0, 0), Point(width_heigh, width_heigh), width_heigh, width_heigh):
-            return fallen_bytes[-1]
+    fallen_bytes = input[:initial_cutoff]
+    remaining_bytes = deque(input[initial_cutoff:])
 
-    return -1
+    # we need an initial copy of the path as a starting point
+    path = a_star(fallen_bytes, Point(0, 0), Point(width_heigh, width_heigh), width_heigh, width_heigh)
+    while remaining_bytes:
+
+        # pop the next falling byte from the queue and add it to the fallen bytes
+        next_byte = remaining_bytes.popleft()
+        fallen_bytes.append(next_byte)
+
+        # if that byte is not on the previously computed path, then we can ignore it and continue the loop
+        if next_byte not in path:
+            continue
+
+        # otherwise, we need to recompute the path. if there is no valid path, then next_byte is the answer
+        path = a_star(fallen_bytes, Point(0, 0), Point(width_heigh, width_heigh), width_heigh, width_heigh)
+        if not path:
+            return next_byte
+
+    raise Exception("didn't find the answer")
 
 
 def main():
