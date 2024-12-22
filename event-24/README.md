@@ -23,4 +23,4 @@ Execution times on M3 Max
 | 19 | 541ms | 519ms |
 | 20 | ? | ? |
 | 21 | ? | ? |
-| 22 | 626ms | ms |
+| 22 | 626ms | 2.17ms |
