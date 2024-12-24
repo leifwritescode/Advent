@@ -76,7 +76,8 @@ def part_one(input):
 
 
 def part_two(input):
-    return -1
+    # cnk,mps,msq,qwf,vhm,z14,z27,z39
+    return "by hand - see comment"
 
 
 def main():
