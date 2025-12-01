@@ -1,5 +1,5 @@
 from utilities import read_input, timed
-from abc import ABC, abstractmethod, abstractproperty
+from abc import ABC, abstractmethod
 
 
 class Operation(ABC):
@@ -13,20 +13,21 @@ class Operation(ABC):
 
 class Addition(Operation):
     def execute(self, p):
-        return (p + self.value) % 100
+        new_p = (p + self.value) % 100
+        times_at_zero = (p + self.value) // 100
+        return (new_p, times_at_zero)
 
 
 class Subtraction(Operation):
     def execute(self, p):
-        return (p - self.value) % 100
+        new_p = (p - self.value) % 100
+        times_at_zero = (self.value - (p or 100)) // 100 + 1 if self.value >= p else 0
+        return (new_p, times_at_zero)
 
 
 def prepare_input():
     lines = read_input()
 
-    # each line of the input is a string beginning with an L or an R, followed by a number
-    # e.g. "L3", "R2", etc.
-    # if the is prefixed with L, the operation is subtraction and, if R, addition
     processed = []
     for line in lines:
         direction = line[0]
@@ -45,7 +46,7 @@ def part_one(input):
     counter = 0
 
     for operation in input:
-        pointer = operation.execute(pointer)
+        pointer, _ = operation.execute(pointer)
         if pointer == 0:
             counter += 1
     
@@ -53,7 +54,14 @@ def part_one(input):
 
 
 def part_two(input):
-    return -1
+    pointer = 50 # 0-99
+    counter = 0
+
+    for operation in input:
+        pointer, times_at_zero = operation.execute(pointer)
+        counter += times_at_zero
+
+    return counter
 
 
 def main():
